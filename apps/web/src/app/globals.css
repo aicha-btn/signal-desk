@@ -172,14 +172,10 @@ a {
   pointer-events: none;
 }
 
-.hero-color-plane,
-.hero-color-line {
+.hero-color-plane {
   position: absolute;
   display: block;
   will-change: transform;
-}
-
-.hero-color-plane {
   border: 1px solid rgb(18 18 18 / 10%);
 }
 
@@ -191,7 +187,7 @@ a {
   background: var(--cobalt-500);
   opacity: 0.32;
   transform: rotate(-7deg);
-  animation: hero-plane-one 16s ease-in-out infinite alternate;
+  animation: hero-drift-cobalt 11s ease-in-out infinite alternate;
 }
 
 .hero-color-plane-magenta {
@@ -202,7 +198,7 @@ a {
   background: var(--magenta-500);
   opacity: 0.25;
   transform: rotate(8deg);
-  animation: hero-plane-two 19s ease-in-out infinite alternate;
+  animation: hero-drift-magenta 13s ease-in-out infinite alternate;
 }
 
 .hero-color-plane-acid {
@@ -213,7 +209,7 @@ a {
   background: var(--acid-400);
   opacity: 0.38;
   transform: rotate(-5deg);
-  animation: hero-plane-three 21s ease-in-out infinite alternate;
+  animation: hero-drift-acid 14s ease-in-out infinite alternate;
 }
 
 .hero-color-plane-coral {
@@ -224,7 +220,7 @@ a {
   background: var(--coral-500);
   opacity: 0.23;
   transform: rotate(11deg);
-  animation: hero-plane-two 23s ease-in-out infinite alternate-reverse;
+  animation: hero-drift-coral 12s ease-in-out infinite alternate;
 }
 
 .hero-color-plane-cyan {
@@ -235,47 +231,67 @@ a {
   background: var(--cyan-400);
   opacity: 0.26;
   transform: rotate(3deg);
-  animation: hero-plane-one 18s ease-in-out infinite alternate-reverse;
+  animation: hero-drift-cyan 10s ease-in-out infinite alternate;
 }
 
-.hero-color-line {
-  height: 2px;
-  background: var(--ink-950);
-  opacity: 0.16;
+@keyframes hero-drift-cobalt {
+  0% {
+    transform: translate3d(-2%, -2%, 0) rotate(-7deg);
+  }
+  50% {
+    transform: translate3d(2%, 1%, 0) rotate(-4deg);
+  }
+  100% {
+    transform: translate3d(6%, 4%, 0) rotate(-1deg);
+  }
 }
 
-.hero-color-line-one {
-  top: 27%;
-  right: -4%;
-  width: 68%;
-  animation: hero-line 14s ease-in-out infinite alternate;
+@keyframes hero-drift-magenta {
+  0% {
+    transform: translate3d(3%, -3%, 0) rotate(8deg);
+  }
+  50% {
+    transform: translate3d(-1%, 1%, 0) rotate(5deg);
+  }
+  100% {
+    transform: translate3d(-6%, 5%, 0) rotate(2deg);
+  }
 }
 
-.hero-color-line-two {
-  right: 8%;
-  bottom: 24%;
-  width: 42%;
-  animation: hero-line 17s ease-in-out infinite alternate-reverse;
+@keyframes hero-drift-acid {
+  0% {
+    transform: translate3d(-3%, 3%, 0) rotate(-5deg);
+  }
+  50% {
+    transform: translate3d(1%, -1%, 0) rotate(-2deg);
+  }
+  100% {
+    transform: translate3d(5%, -5%, 0) rotate(2deg);
+  }
 }
 
-@keyframes hero-plane-one {
-  from { transform: translate3d(-1.5%, -1%, 0) rotate(-7deg); }
-  to { transform: translate3d(3%, 2%, 0) rotate(-3deg); }
+@keyframes hero-drift-coral {
+  0% {
+    transform: translate3d(-2%, 4%, 0) rotate(11deg);
+  }
+  50% {
+    transform: translate3d(3%, 1%, 0) rotate(8deg);
+  }
+  100% {
+    transform: translate3d(7%, -3%, 0) rotate(5deg);
+  }
 }
 
-@keyframes hero-plane-two {
-  from { transform: translate3d(1%, -2%, 0) rotate(8deg); }
-  to { transform: translate3d(-3%, 3%, 0) rotate(4deg); }
-}
-
-@keyframes hero-plane-three {
-  from { transform: translate3d(-2%, 2%, 0) rotate(-5deg); }
-  to { transform: translate3d(2%, -2%, 0) rotate(-1deg); }
-}
-
-@keyframes hero-line {
-  from { transform: translateX(-4%); }
-  to { transform: translateX(5%); }
+@keyframes hero-drift-cyan {
+  0% {
+    transform: translate3d(4%, -3%, 0) rotate(3deg);
+  }
+  50% {
+    transform: translate3d(0, 2%, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate3d(-6%, 4%, 0) rotate(-3deg);
+  }
 }
 
 .signal-chip {

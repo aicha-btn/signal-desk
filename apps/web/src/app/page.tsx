@@ -124,8 +124,6 @@ export default function Home() {
           <span className="hero-color-plane hero-color-plane-acid" />
           <span className="hero-color-plane hero-color-plane-coral" />
           <span className="hero-color-plane hero-color-plane-cyan" />
-          <span className="hero-color-line hero-color-line-one" />
-          <span className="hero-color-line hero-color-line-two" />
         </div>
 
         <div className="mx-auto flex h-full min-h-[640px] max-w-[1600px] flex-col justify-between px-4 py-7 sm:min-h-[680px] md:px-8 md:py-10 lg:min-h-[650px]">
