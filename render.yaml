@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: signal-desk-api
+    runtime: docker
+    plan: free
+    region: frankfurt
+    branch: main
+    rootDir: apps/api
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/v1/health
+    autoDeployTrigger: commit
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: SUPABASE_URL
+        value: https://svrwsnxhixlpjxxspebd.supabase.co
+      - key: SUPABASE_JWT_AUDIENCE
+        value: authenticated
+      - key: SUPABASE_JWT_ALGORITHM
+        value: ES256
+      - key: WEB_CONCURRENCY
+        value: "1"
+      - key: RAILS_MAX_THREADS
+        value: "3"
+      - key: RAILS_LOG_LEVEL
+        value: info

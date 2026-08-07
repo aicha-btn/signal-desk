@@ -58,13 +58,14 @@ application access path.
 ## Production
 
 - Vercel project: `signal-desk`, with `apps/web` as its Root Directory.
-- Koyeb service: Rails Docker deployment from the `apps/api` workdir.
+- Render service: Rails Docker deployment from `apps/api`, defined by
+  `render.yaml` at the repository root.
 - Supabase: hosted Auth and PostgreSQL project.
 
 Vercel requires `RAILS_API_URL`, `NEXT_PUBLIC_SITE_URL`,
 `NEXT_PUBLIC_SUPABASE_URL`, and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
 
-Koyeb requires `DATABASE_URL`, `RAILS_MASTER_KEY`, `SUPABASE_URL`,
+Render requires `DATABASE_URL`, `RAILS_MASTER_KEY`, `SUPABASE_URL`,
 `SUPABASE_JWT_AUDIENCE=authenticated`, and `SUPABASE_JWT_ALGORITHM=ES256`.
 
 The design documentation at the repository root remains the source of truth
