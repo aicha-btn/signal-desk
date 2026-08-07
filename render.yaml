@@ -4,6 +4,7 @@ services:
     runtime: docker
     plan: free
     region: frankfurt
+    repo: https://github.com/aicha-btn/signal-desk
     branch: main
     rootDir: apps/api
     dockerfilePath: ./Dockerfile
