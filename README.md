@@ -57,6 +57,8 @@ application access path.
 
 ## Production
 
+- Web: https://signal-desk-lake.vercel.app
+- API: https://signal-desk-api-5jsn.onrender.com
 - Vercel project: `signal-desk`, with `apps/web` as its Root Directory.
 - Render service: Rails Docker deployment from `apps/api`, defined by
   `render.yaml` at the repository root.
