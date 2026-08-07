@@ -1,0 +1,23 @@
+{
+  "name": "signal-desk",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "dev": "concurrently --kill-others-on-fail --names web,api --prefix-colors blue,magenta \"pnpm dev:web\" \"pnpm dev:api\"",
+    "dev:web": "pnpm --dir apps/web dev",
+    "dev:api": "cd apps/api && mise exec -- bin/rails server -p 3001",
+    "build:web": "pnpm --dir apps/web build",
+    "lint:web": "pnpm --dir apps/web lint",
+    "test:api": "cd apps/api && mise exec -- bundle exec rspec",
+    "lint:api": "cd apps/api && mise exec -- bin/rubocop",
+    "db:prepare": "cd apps/api && mise exec -- bin/rails db:prepare",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "check": "pnpm lint:web && pnpm build:web && pnpm lint:api && pnpm test:api"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.4",
+    "supabase": "^2.112.0"
+  }
+}
