@@ -29,7 +29,8 @@ module Api
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
-    # Rails owns the business schema, including PostgreSQL-specific features.
+    # Supabase includes PostgreSQL-specific schemas; migrations stay the portable source of truth.
     config.active_record.schema_format = :sql
+    config.active_record.dump_schema_after_migration = false
   end
 end

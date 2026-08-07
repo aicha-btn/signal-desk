@@ -19,8 +19,37 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SignalDesk",
-  description: "Turn customer feedback into decisions your team can act on.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  title: {
+    default: "SignalDesk | Customer feedback intelligence",
+    template: "%s | SignalDesk",
+  },
+  description:
+    "Turn scattered customer feedback into clear, shared product decisions.",
+  openGraph: {
+    title: "SignalDesk | Turn customer feedback into clear decisions",
+    description:
+      "Capture every signal, reveal what matters and close the loop from one shared feed.",
+    type: "website",
+    images: [
+      {
+        url: "/images/signals-into-decisions.png",
+        width: 1536,
+        height: 1024,
+        alt: "SignalDesk turns scattered feedback into an ordered signal flow",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SignalDesk | Customer feedback intelligence",
+    description: "Stop collecting feedback. Start deciding with it.",
+    images: ["/images/signals-into-decisions.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resource :health, only: :show, controller: :health
+      resources :early_access_signups, only: :create
     end
   end
 
