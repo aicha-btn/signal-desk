@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import {
   ArrowDown,
   ArrowRight,
@@ -117,17 +116,17 @@ export default function Home() {
       <section
         id="top"
         aria-labelledby="hero-title"
-        className="relative isolate min-h-[640px] border-b-2 border-[var(--ink-950)] sm:min-h-[680px] lg:h-[calc(100svh-110px)] lg:min-h-[650px] lg:max-h-[850px]"
+        className="relative isolate min-h-[640px] overflow-hidden border-b-2 border-[var(--ink-950)] bg-[var(--paper-0)] sm:min-h-[680px] lg:h-[calc(100svh-110px)] lg:min-h-[650px] lg:max-h-[850px]"
       >
-        <Image
-          src="/images/signals-into-decisions.png"
-          alt="A vivid precision desk turning scattered feedback into an ordered signal flow"
-          fill
-          priority
-          sizes="100vw"
-          className="-z-20 object-cover object-left"
-        />
-        <div aria-hidden="true" className="hero-wash absolute inset-0 -z-10" />
+        <div aria-hidden="true" className="hero-color-field">
+          <span className="hero-color-plane hero-color-plane-cobalt" />
+          <span className="hero-color-plane hero-color-plane-magenta" />
+          <span className="hero-color-plane hero-color-plane-acid" />
+          <span className="hero-color-plane hero-color-plane-coral" />
+          <span className="hero-color-plane hero-color-plane-cyan" />
+          <span className="hero-color-line hero-color-line-one" />
+          <span className="hero-color-line hero-color-line-two" />
+        </div>
 
         <div className="mx-auto flex h-full min-h-[640px] max-w-[1600px] flex-col justify-between px-4 py-7 sm:min-h-[680px] md:px-8 md:py-10 lg:min-h-[650px]">
           <div className="max-w-[840px]">

@@ -159,8 +159,123 @@ a {
   background: var(--acid-400);
 }
 
-.hero-wash {
-  background: rgb(255 255 255 / 70%);
+.hero-color-field {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 66.666%;
+  overflow: hidden;
+  background: var(--paper-0);
+  opacity: 0.46;
+  pointer-events: none;
+}
+
+.hero-color-plane,
+.hero-color-line {
+  position: absolute;
+  display: block;
+  will-change: transform;
+}
+
+.hero-color-plane {
+  border: 1px solid rgb(18 18 18 / 10%);
+}
+
+.hero-color-plane-cobalt {
+  top: -12%;
+  left: 8%;
+  width: 72%;
+  height: 54%;
+  background: var(--cobalt-500);
+  opacity: 0.32;
+  transform: rotate(-7deg);
+  animation: hero-plane-one 16s ease-in-out infinite alternate;
+}
+
+.hero-color-plane-magenta {
+  top: 15%;
+  right: -14%;
+  width: 62%;
+  height: 58%;
+  background: var(--magenta-500);
+  opacity: 0.25;
+  transform: rotate(8deg);
+  animation: hero-plane-two 19s ease-in-out infinite alternate;
+}
+
+.hero-color-plane-acid {
+  right: 12%;
+  bottom: -18%;
+  width: 70%;
+  height: 58%;
+  background: var(--acid-400);
+  opacity: 0.38;
+  transform: rotate(-5deg);
+  animation: hero-plane-three 21s ease-in-out infinite alternate;
+}
+
+.hero-color-plane-coral {
+  bottom: 9%;
+  left: -10%;
+  width: 46%;
+  height: 48%;
+  background: var(--coral-500);
+  opacity: 0.23;
+  transform: rotate(11deg);
+  animation: hero-plane-two 23s ease-in-out infinite alternate-reverse;
+}
+
+.hero-color-plane-cyan {
+  top: 33%;
+  left: 30%;
+  width: 48%;
+  height: 34%;
+  background: var(--cyan-400);
+  opacity: 0.26;
+  transform: rotate(3deg);
+  animation: hero-plane-one 18s ease-in-out infinite alternate-reverse;
+}
+
+.hero-color-line {
+  height: 2px;
+  background: var(--ink-950);
+  opacity: 0.16;
+}
+
+.hero-color-line-one {
+  top: 27%;
+  right: -4%;
+  width: 68%;
+  animation: hero-line 14s ease-in-out infinite alternate;
+}
+
+.hero-color-line-two {
+  right: 8%;
+  bottom: 24%;
+  width: 42%;
+  animation: hero-line 17s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes hero-plane-one {
+  from { transform: translate3d(-1.5%, -1%, 0) rotate(-7deg); }
+  to { transform: translate3d(3%, 2%, 0) rotate(-3deg); }
+}
+
+@keyframes hero-plane-two {
+  from { transform: translate3d(1%, -2%, 0) rotate(8deg); }
+  to { transform: translate3d(-3%, 3%, 0) rotate(4deg); }
+}
+
+@keyframes hero-plane-three {
+  from { transform: translate3d(-2%, 2%, 0) rotate(-5deg); }
+  to { transform: translate3d(2%, -2%, 0) rotate(-1deg); }
+}
+
+@keyframes hero-line {
+  from { transform: translateX(-4%); }
+  to { transform: translateX(5%); }
 }
 
 .signal-chip {
@@ -238,8 +353,9 @@ a {
 }
 
 @media (max-width: 639px) {
-  .hero-wash {
-    background: rgb(255 255 255 / 78%);
+  .hero-color-field {
+    width: 58%;
+    opacity: 0.34;
   }
 
   .section-title {
