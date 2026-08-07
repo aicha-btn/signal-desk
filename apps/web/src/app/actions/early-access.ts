@@ -17,11 +17,6 @@ export type LeadFormState = {
   fieldErrors?: Record<string, string[]>;
 };
 
-export const initialLeadFormState: LeadFormState = {
-  status: "idle",
-  message: "",
-};
-
 export async function joinEarlyAccess(
   _previousState: LeadFormState,
   formData: FormData,

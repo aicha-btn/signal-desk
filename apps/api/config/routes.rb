@@ -9,6 +9,9 @@ Rails.application.routes.draw do
     namespace :v1 do
       resource :health, only: :show, controller: :health
       resources :early_access_signups, only: :create
+      resource :me, only: :show, controller: :me
+      resource :onboarding, only: :create, controller: :onboarding
+      resources :workspaces, only: %i[index create update]
     end
   end
 

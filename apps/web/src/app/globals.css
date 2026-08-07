@@ -368,6 +368,69 @@ a {
   outline-color: var(--acid-400);
 }
 
+.app-form-label {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.25rem;
+}
+
+.app-form-control {
+  width: 100%;
+  min-height: 44px;
+  border: 2px solid var(--ink-950);
+  border-radius: 0;
+  background: var(--paper-0);
+  color: var(--ink-950);
+  padding: 0.65rem 0.75rem;
+}
+
+.app-form-control::placeholder {
+  color: var(--ink-600);
+}
+
+.auth-signal-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  opacity: 0.42;
+  pointer-events: none;
+}
+
+.auth-signal-shape {
+  position: absolute;
+  display: block;
+  border: 2px solid var(--paper-0);
+}
+
+.auth-signal-shape-one {
+  top: 12%;
+  right: -12%;
+  width: 58%;
+  height: 36%;
+  background: var(--magenta-500);
+  transform: rotate(8deg);
+}
+
+.auth-signal-shape-two {
+  right: 16%;
+  bottom: 24%;
+  width: 46%;
+  height: 26%;
+  background: var(--cyan-400);
+  transform: rotate(-5deg);
+}
+
+.auth-signal-shape-three {
+  right: -8%;
+  bottom: -8%;
+  width: 72%;
+  height: 30%;
+  background: var(--acid-400);
+  transform: rotate(4deg);
+}
+
 @media (max-width: 639px) {
   .hero-color-field {
     width: 58%;

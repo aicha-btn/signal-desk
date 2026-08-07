@@ -3,6 +3,7 @@ import {
   ArrowDown,
   ArrowRight,
   Check,
+  LogIn,
   MoveRight,
   Sparkles,
 } from "lucide-react";
@@ -107,10 +108,21 @@ export default function Home() {
           <a className="nav-link" href="#teams">Teams</a>
           <a className="nav-link" href="#faq">FAQ</a>
         </nav>
-        <a className="button button-dark min-h-10 px-4 text-sm" href="#early-access">
-          Get early access
-          <ArrowRight aria-hidden="true" size={17} strokeWidth={2.4} />
-        </a>
+        <div className="flex items-center gap-2">
+          <a
+            className="flex size-10 items-center justify-center border-2 border-[var(--ink-950)] bg-[var(--paper-0)] sm:w-auto sm:gap-2 sm:px-3"
+            href="/login"
+            aria-label="Sign in"
+            title="Sign in"
+          >
+            <LogIn aria-hidden="true" size={17} />
+            <span className="hidden text-sm font-bold sm:inline">Sign in</span>
+          </a>
+          <a className="button button-dark min-h-10 px-3 text-sm sm:px-4" href="#early-access">
+            Get early access
+            <ArrowRight aria-hidden="true" size={17} strokeWidth={2.4} />
+          </a>
+        </div>
       </header>
 
       <section

@@ -28,3 +28,4 @@ apps/api/vendor/bundle/
 
 supabase/.branches/
 supabase/.temp/
+.vercel/

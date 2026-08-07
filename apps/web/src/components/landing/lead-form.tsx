@@ -3,9 +3,11 @@
 import { useActionState } from "react";
 import { ArrowRight, Check } from "lucide-react";
 import {
-  initialLeadFormState,
   joinEarlyAccess,
+  type LeadFormState,
 } from "@/app/actions/early-access";
+
+const initialLeadFormState: LeadFormState = { status: "idle", message: "" };
 
 function FieldError({ errors, id }: { errors?: string[]; id?: string }) {
   if (!errors?.length) return null;
