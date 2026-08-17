@@ -10,6 +10,7 @@ import {
 import { LeadForm } from "@/components/landing/lead-form";
 import { MotionController } from "@/components/landing/motion-controller";
 import { SignalFeedDemo } from "@/components/landing/signal-feed-demo";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "SignalDesk | Turn customer feedback into clear decisions",
@@ -79,7 +80,11 @@ const questions = [
   },
 ] as const;
 
-export default function Home() {
+export default async function Home() {
+  const supabase = await createClient();
+  const { data } = await supabase.auth.getClaims();
+  const isAuthenticated = Boolean(data?.claims);
+
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -109,19 +114,28 @@ export default function Home() {
           <a className="nav-link" href="#faq">FAQ</a>
         </nav>
         <div className="flex items-center gap-2">
-          <a
-            className="flex size-10 items-center justify-center border-2 border-[var(--ink-950)] bg-[var(--paper-0)] sm:w-auto sm:gap-2 sm:px-3"
-            href="/login"
-            aria-label="Sign in"
-            title="Sign in"
-          >
-            <LogIn aria-hidden="true" size={17} />
-            <span className="hidden text-sm font-bold sm:inline">Sign in</span>
-          </a>
-          <a className="button button-dark min-h-10 px-3 text-sm sm:px-4" href="#early-access">
-            Get early access
-            <ArrowRight aria-hidden="true" size={17} strokeWidth={2.4} />
-          </a>
+          {isAuthenticated ? (
+            <a className="button button-dark min-h-10 px-3 text-sm sm:px-4" href="/control-room">
+              Open Control Room
+              <ArrowRight aria-hidden="true" size={17} strokeWidth={2.4} />
+            </a>
+          ) : (
+            <>
+              <a
+                className="flex size-10 items-center justify-center border-2 border-[var(--ink-950)] bg-[var(--paper-0)] sm:w-auto sm:gap-2 sm:px-3"
+                href="/login"
+                aria-label="Sign in"
+                title="Sign in"
+              >
+                <LogIn aria-hidden="true" size={17} />
+                <span className="hidden text-sm font-bold sm:inline">Sign in</span>
+              </a>
+              <a className="button button-dark min-h-10 px-3 text-sm sm:px-4" href="#early-access">
+                Get early access
+                <ArrowRight aria-hidden="true" size={17} strokeWidth={2.4} />
+              </a>
+            </>
+          )}
         </div>
       </header>
 
