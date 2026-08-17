@@ -18,7 +18,7 @@ function FieldError({ errors }: { errors?: string[] }) {
   return <p className="mt-1 text-sm text-[var(--coral-500)]">{errors[0]}</p>;
 }
 
-export function AuthForm({ mode }: { mode: Mode }) {
+export function AuthForm({ mode, nextPath }: { mode: Mode; nextPath?: string }) {
   const action = mode === "login" ? signIn : signUp;
   const [state, formAction, pending] = useActionState(action, initialAuthFormState);
 
@@ -28,7 +28,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
         <Check aria-hidden="true" className="mb-6" size={32} strokeWidth={2.4} />
         <h2 className="font-display text-3xl font-bold">Signal sent.</h2>
         <p className="mt-3 max-w-md leading-6">{state.message}</p>
-        <Link className="button button-dark mt-6" href="/login">
+        <Link className="button button-dark mt-6" href={nextPath ? `/login?next=${encodeURIComponent(nextPath)}` : "/login"}>
           Return to sign in <ArrowRight aria-hidden="true" size={18} />
         </Link>
       </div>
@@ -37,15 +37,16 @@ export function AuthForm({ mode }: { mode: Mode }) {
 
   return (
     <form action={formAction} onReset={(event) => event.preventDefault()} noValidate>
+      {nextPath && <input type="hidden" name="nextPath" value={nextPath} />}
       <div className="mb-8 flex border-2 border-[var(--ink-950)]" aria-label="Authentication mode">
         <Link
-          href="/login"
+          href={nextPath ? `/login?next=${encodeURIComponent(nextPath)}` : "/login"}
           className={`flex min-h-11 flex-1 items-center justify-center border-r-2 border-[var(--ink-950)] text-sm font-bold ${mode === "login" ? "bg-[var(--ink-950)] text-[var(--paper-0)]" : "bg-[var(--paper-0)]"}`}
         >
           Sign in
         </Link>
         <Link
-          href="/login?mode=signup"
+          href={nextPath ? `/login?mode=signup&next=${encodeURIComponent(nextPath)}` : "/login?mode=signup"}
           className={`flex min-h-11 flex-1 items-center justify-center text-sm font-bold ${mode === "signup" ? "bg-[var(--ink-950)] text-[var(--paper-0)]" : "bg-[var(--paper-0)]"}`}
         >
           Create account

@@ -18,7 +18,11 @@ Rails.application.routes.draw do
         end
         resources :customers, only: %i[index create]
         resources :members, only: :index
+        resources :invitations, only: %i[index create destroy]
         resources :tags, only: %i[index create update destroy]
+      end
+      resources :invitations, only: :show, param: :token do
+        post :accept, on: :member
       end
     end
   end

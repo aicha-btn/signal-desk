@@ -73,6 +73,21 @@ export type Member = {
   };
 };
 
+export type WorkspaceInvitation = {
+  id: number;
+  email: string;
+  role: "admin" | "member";
+  status: "pending" | "accepted" | "expired";
+  expires_at: string;
+  created_at: string;
+  invited_by: {
+    id: number;
+    email: string;
+    display_name: string | null;
+  };
+  workspace?: Pick<Workspace, "id" | "name" | "slug">;
+};
+
 export type Comment = {
   id: number;
   body: string;
@@ -190,6 +205,18 @@ export function getCustomers(workspaceId: number) {
 export function getMembers(workspaceId: number) {
   return railsRequest<{ members: Member[] }>(
     `/api/v1/workspaces/${workspaceId}/members`,
+  );
+}
+
+export function getInvitations(workspaceId: number) {
+  return railsRequest<{ invitations: WorkspaceInvitation[] }>(
+    `/api/v1/workspaces/${workspaceId}/invitations`,
+  );
+}
+
+export function getInvitation(token: string) {
+  return railsRequest<{ invitation: WorkspaceInvitation }>(
+    `/api/v1/invitations/${encodeURIComponent(token)}`,
   );
 }
 

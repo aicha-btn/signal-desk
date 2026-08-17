@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 const credentialsSchema = z.object({
   email: z.email("Enter a valid work email."),
   password: z.string().min(8, "Use at least 8 characters.").max(72),
+  nextPath: z.string().optional(),
 });
 
 const signupSchema = credentialsSchema
@@ -33,19 +34,23 @@ export async function signIn(
   const parsed = credentialsSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
+    nextPath: formData.get("nextPath")?.toString(),
   });
 
   if (!parsed.success) return validationState(parsed.error.flatten().fieldErrors);
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword(parsed.data);
+  const { error } = await supabase.auth.signInWithPassword({
+    email: parsed.data.email,
+    password: parsed.data.password,
+  });
 
   if (error) {
     return { status: "error", message: "Email or password is incorrect." };
   }
 
   revalidatePath("/", "layout");
-  redirect("/control-room");
+  redirect(safeNextPath(parsed.data.nextPath, "/control-room"));
 }
 
 export async function signUp(
@@ -57,18 +62,20 @@ export async function signUp(
     email: formData.get("email"),
     password: formData.get("password"),
     passwordConfirmation: formData.get("passwordConfirmation"),
+    nextPath: formData.get("nextPath")?.toString(),
   });
 
   if (!parsed.success) return validationState(parsed.error.flatten().fieldErrors);
 
   const supabase = await createClient();
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const nextPath = safeNextPath(parsed.data.nextPath, "/onboarding");
   const { data, error } = await supabase.auth.signUp({
     email: parsed.data.email,
     password: parsed.data.password,
     options: {
       data: { display_name: parsed.data.displayName },
-      emailRedirectTo: `${siteUrl}/auth/callback?next=/onboarding`,
+      emailRedirectTo: `${siteUrl}/auth/callback?next=${encodeURIComponent(nextPath)}`,
     },
   });
 
@@ -77,12 +84,16 @@ export async function signUp(
   }
 
   revalidatePath("/", "layout");
-  if (data.session) redirect("/onboarding");
+  if (data.session) redirect(nextPath);
 
   return {
     status: "success",
     message: "Check your email to confirm your account, then return to sign in.",
   };
+}
+
+function safeNextPath(value: string | undefined, fallback: string) {
+  return value?.startsWith("/") && !value.startsWith("//") ? value : fallback;
 }
 
 function validationState(fieldErrors: Record<string, string[] | undefined>): AuthFormState {

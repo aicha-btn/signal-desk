@@ -4,6 +4,10 @@ class User < ApplicationRecord
   has_many :created_feedbacks, class_name: "Feedback", foreign_key: :created_by_id, dependent: :nullify
   has_many :comments, foreign_key: :author_id, dependent: :destroy
   has_many :activity_events, foreign_key: :actor_id, dependent: :nullify
+  has_many :sent_workspace_invitations,
+    class_name: "WorkspaceInvitation",
+    foreign_key: :invited_by_id,
+    dependent: :restrict_with_error
 
   validates :supabase_user_id, presence: true, uniqueness: true
   validates :email,

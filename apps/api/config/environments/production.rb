@@ -49,12 +49,11 @@ Rails.application.configure do
   config.cache_store = :memory_store
   config.active_job.queue_adapter = :async
 
-  # Ignore bad email addresses and do not raise email delivery errors.
-  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
-  # config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.delivery_method = :resend if ENV["RESEND_API_KEY"].present?
+  config.action_mailer.raise_delivery_errors = true
 
   # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "example.com" }
+  config.action_mailer.default_url_options = { host: URI(ENV.fetch("APP_URL", "https://signal-desk-lake.vercel.app")).host }
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via bin/rails credentials:edit.
   # config.action_mailer.smtp_settings = {

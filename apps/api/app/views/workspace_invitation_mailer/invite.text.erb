@@ -1,0 +1,7 @@
+You have been invited to <%= @invitation.workspace.name %> on SignalDesk.
+
+<%= @invitation.invited_by.display_name.presence || @invitation.invited_by.email %> invited you as <%= @invitation.role %>.
+
+Accept the invitation: <%= @accept_url %>
+
+This private link expires in 7 days. Sign in with <%= @invitation.email %>.

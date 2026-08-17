@@ -28,3 +28,9 @@ services:
         value: "3"
       - key: RAILS_LOG_LEVEL
         value: info
+      - key: APP_URL
+        value: https://signal-desk-lake.vercel.app
+      - key: RESEND_API_KEY
+        sync: false
+      - key: MAILER_FROM
+        sync: false

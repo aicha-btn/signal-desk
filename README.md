@@ -68,7 +68,9 @@ Vercel requires `RAILS_API_URL`, `NEXT_PUBLIC_SITE_URL`,
 `NEXT_PUBLIC_SUPABASE_URL`, and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
 
 Render requires `DATABASE_URL`, `RAILS_MASTER_KEY`, `SUPABASE_URL`,
-`SUPABASE_JWT_AUDIENCE=authenticated`, and `SUPABASE_JWT_ALGORITHM=ES256`.
+`SUPABASE_JWT_AUDIENCE=authenticated`, `SUPABASE_JWT_ALGORITHM=ES256`,
+`APP_URL`, `RESEND_API_KEY`, and `MAILER_FROM`. See
+`docs/resend-invitations.md` for the invitation email setup.
 
 The design documentation at the repository root remains the source of truth
 for all interface work. Start with `AGENTS.md` before making changes.

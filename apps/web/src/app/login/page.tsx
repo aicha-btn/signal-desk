@@ -13,13 +13,14 @@ export const metadata: Metadata = {
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ mode?: string }>;
+  searchParams: Promise<{ mode?: string; next?: string }>;
 }) {
+  const { mode: requestedMode, next: requestedNext } = await searchParams;
+  const nextPath = requestedNext?.startsWith("/") && !requestedNext.startsWith("//") ? requestedNext : undefined;
   const supabase = await createClient();
   const { data } = await supabase.auth.getClaims();
-  if (data?.claims) redirect("/control-room");
+  if (data?.claims) redirect(nextPath ?? "/control-room");
 
-  const { mode: requestedMode } = await searchParams;
   const mode = requestedMode === "signup" ? "signup" : "login";
 
   return (
@@ -59,7 +60,7 @@ export default async function LoginPage({
               ? "Your feed, priorities and team context are waiting."
               : "Create your account first. Your workspace comes next."}
           </p>
-          <AuthForm mode={mode} />
+          <AuthForm mode={mode} nextPath={nextPath} />
         </div>
       </section>
     </main>

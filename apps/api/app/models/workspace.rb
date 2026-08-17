@@ -6,6 +6,7 @@ class Workspace < ApplicationRecord
   has_many :tags, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :activity_events, dependent: :destroy
+  has_many :workspace_invitations, dependent: :destroy
 
   validates :name, presence: true, length: { maximum: 100 }
   validates :slug,

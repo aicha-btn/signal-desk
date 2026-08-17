@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+  <body style="margin:0;background:#f7f7f2;color:#101010;font-family:Arial,sans-serif;">
+    <div style="max-width:620px;margin:0 auto;padding:40px 24px;">
+      <p style="margin:0 0 28px;font-size:22px;font-weight:800;">SignalDesk</p>
+      <div style="border:2px solid #101010;background:#ffffff;padding:32px;box-shadow:8px 8px 0 #101010;">
+        <p style="margin:0 0 12px;font-family:monospace;font-size:12px;">WORKSPACE INVITATION / <%= @invitation.role.upcase %></p>
+        <h1 style="margin:0 0 18px;font-size:36px;line-height:1;">A seat is waiting inside <%= @invitation.workspace.name %>.</h1>
+        <p style="margin:0 0 28px;font-size:16px;line-height:1.5;"><%= @invitation.invited_by.display_name.presence || @invitation.invited_by.email %> invited you to join their SignalDesk workspace.</p>
+        <a href="<%= @accept_url %>" style="display:inline-block;border:2px solid #101010;background:#2447ff;color:#ffffff;padding:14px 20px;font-weight:700;text-decoration:none;">Accept invitation</a>
+        <p style="margin:28px 0 0;font-family:monospace;font-size:12px;line-height:1.5;">This private link expires in 7 days. Sign in with <%= @invitation.email %>.</p>
+      </div>
+    </div>
+  </body>
+</html>

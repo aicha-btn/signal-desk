@@ -61,6 +61,7 @@ Un composant ne depasse jamais le niveau de sa page.
 | On Track | Planifie |
 | Closed Loop | Resolu |
 | Capture a Signal | Creer un feedback |
+| Open a seat | Inviter un membre |
 
 L'interface est prioritairement en anglais. Un terme de marque ambigu reste accompagne d'un label explicite.
 
@@ -168,6 +169,13 @@ Visualisation de volume entrant, intensity moyenne, vitesse de resolution et ten
 - aucun spinner plein ecran si du contenu reste disponible ;
 - reduced-motion remplace le mouvement par un etat statique visible ;
 - contrat d'implementation : `docs/loading-and-action-feedback.md`.
+
+## Invitations et emails
+
+- les invitations utilisent le vocabulaire `Open a seat`, toujours accompagne d'un label d'acces explicite ;
+- la page d'acceptation peut monter a 6/10, mais la gestion des membres reste a 3/10 ;
+- les emails reprennent les angles francs, les aplats Cobalt/Acid et une seule action principale ;
+- aucune fantaisie dans les erreurs d'identite, d'expiration ou de permission.
 
 ## Assets
 

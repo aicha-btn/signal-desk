@@ -479,8 +479,10 @@ La liste accepte :
 ### Membres et invitations
 
 - `GET /api/v1/workspaces/:workspace_id/members`
+- `GET /api/v1/workspaces/:workspace_id/invitations`
 - `POST /api/v1/workspaces/:workspace_id/invitations`
 - `DELETE /api/v1/workspaces/:workspace_id/invitations/:id`
+- `GET /api/v1/invitations/:token`
 - `POST /api/v1/invitations/:token/accept`
 
 ### Dashboard
@@ -753,15 +755,15 @@ Services explicitement retires :
 | --- | --- | --- | --- |
 | 1. Cadrage et architecture | Avance | Plan produit, architecture, design system et routeur de contexte | Separer les livrables produit/API dans `docs/` |
 | 2. Fondations techniques | Termine | Monorepo, Next.js, Rails, Supabase, commandes racine, CI, Vercel et Render | Maintenance uniquement |
-| 3. Auth et workspace | Termine | Supabase Auth SSR, JWT Rails, onboarding, memberships, Pundit et isolation | Elargir les tests de roles en phase 7 |
+| 3. Auth et workspace | Termine | Supabase Auth SSR, JWT Rails, onboarding, memberships, Pundit et isolation | Maintenance uniquement |
 | 4. Feedback vertical | Termine | Creation, liste, detail, edition, suppression, erreurs et request specs | Maintenance uniquement |
 | 5. Clients, tags et recherche | Termine | Clients, association client/Signal, tags, recherche, filtres, tri, pagination et URL partageables | Maintenance uniquement |
 | 6. Collaboration et dashboard | Termine | Control Room, statistiques reelles, commentaires, ActivityEvents, services transactionnels et etats complets | Maintenance uniquement |
-| 7. Membres et emails | Commence | Liste des membres et roles visibles | Invitations, acceptation, Resend et tests owner/admin/member |
+| 7. Membres et emails | Termine cote code | Invitations temporaires, acceptation securisee, Action Mailer, Resend et tests owner/admin/member | Ajouter la cle et l'expediteur verifies sur Render |
 | 8. Formulaire public | A faire | Structure de donnees preparee | Page publique, endpoint, anti-abus et tests de securite |
 | 9. Finition portfolio | En cours | Landing page, design system, CI et premiers deploiements | E2E automatise, accessibilite, donnees demo, README final et captures |
 
-Prochaine priorite : construire les invitations de membres, leur acceptation et l'envoi Resend.
+Prochaine priorite : livrer le formulaire public et sa protection anti-abus.
 
 ### Phase 1 - Cadrage et architecture
 
@@ -899,9 +901,9 @@ Cette estimation est volontairement plus haute que le plan initial, car une arch
 
 ## Ordre de priorite immediat
 
-1. Construire les invitations de membres avec Resend.
-2. Livrer le formulaire public et sa protection anti-abus.
-3. Terminer les tests end-to-end, l'accessibilite et les livrables portfolio.
+1. Livrer le formulaire public et sa protection anti-abus.
+2. Terminer les tests end-to-end et l'accessibilite.
+3. Finaliser les donnees demo et les livrables portfolio.
 
 ## Sources techniques de reference
 
