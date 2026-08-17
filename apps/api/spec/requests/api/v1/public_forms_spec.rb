@@ -125,6 +125,13 @@ RSpec.describe "Public feedback forms", type: :request do
     expect(response.headers["Access-Control-Allow-Origin"]).to eq("http://localhost:3000")
 
     options feedback_path, headers: {
+      "Origin" => "https://signal-desk-lake.vercel.app",
+      "Access-Control-Request-Method" => "POST",
+      "Access-Control-Request-Headers" => "content-type"
+    }
+    expect(response.headers["Access-Control-Allow-Origin"]).to eq("https://signal-desk-lake.vercel.app")
+
+    options feedback_path, headers: {
       "Origin" => "https://malicious.example",
       "Access-Control-Request-Method" => "POST"
     }
