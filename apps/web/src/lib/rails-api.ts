@@ -1,5 +1,6 @@
 import "server-only";
 
+import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 
 export type Workspace = {
@@ -18,6 +19,43 @@ export type Account = {
   };
   workspaces: Workspace[];
   onboarding_required: boolean;
+};
+
+export type Feedback = {
+  id: number;
+  title: string;
+  description: string;
+  status: "new" | "reviewing" | "planned" | "resolved";
+  priority: "low" | "medium" | "high" | "critical";
+  source: "internal" | "public_form" | "email" | "support" | "call" | "other";
+  customer: Pick<Customer, "id" | "name" | "company"> | null;
+  created_by: {
+    id: number;
+    display_name: string | null;
+    email: string;
+  } | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type Customer = {
+  id: number;
+  name: string;
+  company: string | null;
+  email: string | null;
+  signals_count: number;
+  created_at: string;
+};
+
+export type Member = {
+  id: number;
+  role: "owner" | "admin" | "member";
+  joined_at: string;
+  user: {
+    id: number;
+    email: string;
+    display_name: string | null;
+  };
 };
 
 export class RailsApiError extends Error {
@@ -73,6 +111,29 @@ export async function railsRequest<T>(
   return body;
 }
 
-export function getAccount() {
-  return railsRequest<Account>("/api/v1/me");
+export const getAccount = cache(() => railsRequest<Account>("/api/v1/me"));
+
+export function getFeedbacks(
+  workspaceId: number,
+  filters: { query?: string; status?: string; priority?: string } = {},
+) {
+  const query = new URLSearchParams(
+    Object.entries(filters).filter((entry): entry is [string, string] => Boolean(entry[1])),
+  );
+  const suffix = query.size ? `?${query.toString()}` : "";
+  return railsRequest<{ feedbacks: Feedback[]; total: number }>(
+    `/api/v1/workspaces/${workspaceId}/feedbacks${suffix}`,
+  );
+}
+
+export function getCustomers(workspaceId: number) {
+  return railsRequest<{ customers: Customer[] }>(
+    `/api/v1/workspaces/${workspaceId}/customers`,
+  );
+}
+
+export function getMembers(workspaceId: number) {
+  return railsRequest<{ members: Member[] }>(
+    `/api/v1/workspaces/${workspaceId}/members`,
+  );
 }

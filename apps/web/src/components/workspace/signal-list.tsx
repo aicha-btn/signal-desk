@@ -1,0 +1,58 @@
+import { Inbox } from "lucide-react";
+import type { Feedback } from "@/lib/rails-api";
+
+const statusLabels: Record<Feedback["status"], string> = {
+  new: "New",
+  reviewing: "Reviewing",
+  planned: "Planned",
+  resolved: "Resolved",
+};
+
+const priorityStyles: Record<Feedback["priority"], string> = {
+  low: "bg-[var(--mint-500)]",
+  medium: "bg-[var(--cyan-400)]",
+  high: "bg-[var(--acid-400)]",
+  critical: "bg-[var(--coral-500)]",
+};
+
+export function SignalList({ feedbacks, compact = false }: { feedbacks: Feedback[]; compact?: boolean }) {
+  if (!feedbacks.length) {
+    return (
+      <div className="grid min-h-[260px] place-items-center p-6 text-center">
+        <div className="max-w-md">
+          <Inbox aria-hidden="true" className="mx-auto text-[var(--cobalt-500)]" size={42} strokeWidth={1.8} />
+          <h3 className="mt-5 font-display text-2xl font-bold">No Signals yet.</h3>
+          <p className="mt-3 leading-6 text-[var(--ink-600)]">
+            Capture the first customer observation, request or friction point to start the feed.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const visibleFeedbacks = compact ? feedbacks.slice(0, 5) : feedbacks;
+
+  return (
+    <div>
+      <div className="hidden grid-cols-[minmax(0,1.8fr)_minmax(130px,0.7fr)_120px_110px_105px] border-b border-[var(--ink-300)] bg-[var(--canvas-50)] px-5 py-3 font-mono text-[10px] text-[var(--ink-600)] md:grid">
+        <span>SIGNAL</span><span>CUSTOMER</span><span>STATUS</span><span>PRIORITY</span><span>CAPTURED</span>
+      </div>
+      <div className="divide-y-2 divide-[var(--ink-950)]">
+        {visibleFeedbacks.map((feedback) => (
+          <article key={feedback.id} className="grid gap-4 px-4 py-5 transition-colors hover:bg-[var(--canvas-50)] md:grid-cols-[minmax(0,1.8fr)_minmax(130px,0.7fr)_120px_110px_105px] md:items-center md:px-5">
+            <div className="min-w-0">
+              <h3 className="truncate font-display text-lg font-bold">{feedback.title}</h3>
+              <p className="mt-1 line-clamp-2 text-sm leading-5 text-[var(--ink-600)]">{feedback.description}</p>
+            </div>
+            <p className="text-sm font-semibold">{feedback.customer?.company || feedback.customer?.name || "Internal"}</p>
+            <span className="w-fit border border-[var(--ink-950)] px-2 py-1 font-mono text-[10px]">{statusLabels[feedback.status].toUpperCase()}</span>
+            <span className={`w-fit border border-[var(--ink-950)] px-2 py-1 font-mono text-[10px] ${priorityStyles[feedback.priority]}`}>{feedback.priority.toUpperCase()}</span>
+            <time className="font-mono text-[10px] text-[var(--ink-600)]" dateTime={feedback.created_at}>
+              {new Intl.DateTimeFormat("en", { day: "2-digit", month: "short" }).format(new Date(feedback.created_at)).toUpperCase()}
+            </time>
+          </article>
+        ))}
+      </div>
+    </div>
+  );
+}

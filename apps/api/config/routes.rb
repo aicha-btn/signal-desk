@@ -11,7 +11,11 @@ Rails.application.routes.draw do
       resources :early_access_signups, only: :create
       resource :me, only: :show, controller: :me
       resource :onboarding, only: :create, controller: :onboarding
-      resources :workspaces, only: %i[index create update]
+      resources :workspaces, only: %i[index create update] do
+        resources :feedbacks, only: %i[index create show update]
+        resources :customers, only: %i[index create]
+        resources :members, only: :index
+      end
     end
   end
 

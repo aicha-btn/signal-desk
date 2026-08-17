@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   has_many :memberships, dependent: :destroy
   has_many :workspaces, through: :memberships
+  has_many :created_feedbacks, class_name: "Feedback", foreign_key: :created_by_id, dependent: :nullify
 
   validates :supabase_user_id, presence: true, uniqueness: true
   validates :email,
