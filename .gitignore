@@ -29,3 +29,5 @@ apps/api/vendor/bundle/
 supabase/.branches/
 supabase/.temp/
 .vercel/
+test-results/
+playwright-report/

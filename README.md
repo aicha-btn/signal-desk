@@ -44,6 +44,17 @@ pnpm dev
 pnpm check
 ```
 
+The release check adds the real browser journey and accessibility scans:
+
+```bash
+pnpm test:e2e:install
+pnpm check:release
+```
+
+The E2E suite provisions a temporary confirmed user in local Supabase, signs in,
+creates a Rails workspace, publishes a Signal and removes all temporary records.
+See `docs/end-to-end-testing.md` for its scope and CI policy.
+
 ## Authenticated flow
 
 Supabase Auth owns credentials and cookie sessions. Next.js verifies the session,

@@ -761,7 +761,7 @@ Services explicitement retires :
 | 6. Collaboration et dashboard | Termine | Control Room, statistiques reelles, commentaires, ActivityEvents, services transactionnels et etats complets | Maintenance uniquement |
 | 7. Membres et emails | Termine cote code | Invitations temporaires, acceptation securisee, Action Mailer, Resend et tests owner/admin/member | Ajouter la cle et l'expediteur verifies sur Render |
 | 8. Formulaire public | Termine | Page publique, configuration workspace, endpoint anonyme, anti-abus et tests de securite | Maintenance uniquement |
-| 9. Finition portfolio | En cours | Landing page, design system, CI et premiers deploiements | E2E automatise, accessibilite, donnees demo, README final et captures |
+| 9. Finition portfolio | En cours | Landing page, design system, CI, E2E du parcours coeur et audit Axe initial | Accessibilite manuelle, donnees demo, README final et captures |
 
 Prochaine priorite : automatiser le parcours principal de bout en bout et auditer l'accessibilite.
 
@@ -859,15 +859,16 @@ Objectif : pouvoir creer et consulter un feedback de bout en bout.
 
 ### Phase 9 - Finition portfolio
 
-- tests end-to-end ;
-- audit accessibilite ;
-- donnees de demonstration ;
-- README final ;
-- diagramme d'architecture ;
-- captures d'ecran ;
-- deploiement final ;
-- verification des liens ;
-- explication des compromis techniques.
+- [x] test end-to-end du login, onboarding et premier Signal ;
+- [x] audit Axe WCAG 2.2 A/AA sur les quatre ecrans du parcours coeur ;
+- [ ] audit manuel clavier, zoom, reduced-motion et pages publiques ;
+- [ ] donnees de demonstration ;
+- [ ] README final ;
+- [ ] diagramme d'architecture ;
+- [ ] captures d'ecran ;
+- [ ] deploiement final ;
+- [ ] verification des liens ;
+- [ ] explication des compromis techniques.
 
 ## Definition de fini
 
@@ -903,7 +904,7 @@ Cette estimation est volontairement plus haute que le plan initial, car une arch
 
 ## Ordre de priorite immediat
 
-1. Terminer les tests end-to-end et l'accessibilite.
+1. Terminer l'audit accessibilite manuel.
 2. Finaliser les donnees demo et les livrables portfolio.
 3. Produire les captures et verifier la demonstration de production.
 
