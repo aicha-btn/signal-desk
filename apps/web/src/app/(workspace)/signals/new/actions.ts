@@ -12,6 +12,7 @@ const signalSchema = z.object({
   priority: z.enum(["low", "medium", "high", "critical"]),
   source: z.enum(["internal", "email", "support", "call", "other"]),
   customerId: z.string(),
+  tagIds: z.array(z.coerce.number().int().positive()).max(20),
 });
 
 export type SignalFormState = {
@@ -28,6 +29,7 @@ export async function createSignal(_previousState: SignalFormState, formData: Fo
     priority: formData.get("priority"),
     source: formData.get("source"),
     customerId: formData.get("customerId") ?? "",
+    tagIds: formData.getAll("tagIds"),
   });
 
   if (!parsed.success) {
@@ -47,6 +49,7 @@ export async function createSignal(_previousState: SignalFormState, formData: Fo
         priority: parsed.data.priority,
         source: parsed.data.source,
         customer_id: parsed.data.customerId || undefined,
+        tag_ids: parsed.data.tagIds,
       }),
     });
     if (!result) redirect("/login");

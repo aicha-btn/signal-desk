@@ -4,7 +4,8 @@ import { useActionState } from "react";
 import { Save } from "lucide-react";
 import { updateSignal, type SignalDetailFormState } from "@/app/(workspace)/signals/actions";
 import { PendingButtonContent } from "@/components/ui/pending-feedback";
-import type { Customer, Feedback } from "@/lib/rails-api";
+import { TagSelector } from "@/components/workspace/tag-selector";
+import type { Customer, Feedback, Tag } from "@/lib/rails-api";
 
 const initialState: SignalDetailFormState = { status: "idle", message: "" };
 
@@ -17,10 +18,12 @@ export function SignalDetailForm({
   workspaceId,
   feedback,
   customers,
+  tags,
 }: {
   workspaceId: number;
   feedback: Feedback;
   customers: Customer[];
+  tags: Tag[];
 }) {
   const [state, formAction, pending] = useActionState(updateSignal, initialState);
 
@@ -68,6 +71,8 @@ export function SignalDetailForm({
           </select>
         </div>
       </div>
+
+      <TagSelector tags={tags} selectedIds={feedback.tags.map((tag) => tag.id)} />
 
       {state.message && <p className="border-l-4 border-[var(--coral-500)] pl-3 text-sm" role="alert">{state.message}</p>}
 

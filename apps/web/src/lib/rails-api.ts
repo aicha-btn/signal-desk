@@ -28,6 +28,7 @@ export type Feedback = {
   status: "new" | "reviewing" | "planned" | "resolved";
   priority: "low" | "medium" | "high" | "critical";
   source: "internal" | "public_form" | "email" | "support" | "call" | "other";
+  tags: Pick<Tag, "id" | "name">[];
   customer: Pick<Customer, "id" | "name" | "company"> | null;
   created_by: {
     id: number;
@@ -36,6 +37,20 @@ export type Feedback = {
   } | null;
   created_at: string;
   updated_at: string;
+};
+
+export type Tag = {
+  id: number;
+  name: string;
+  feedbacks_count: number;
+};
+
+export type FeedbackListMeta = {
+  page: number;
+  per_page: number;
+  total: number;
+  total_pages: number;
+  sort: "newest" | "oldest" | "priority_desc" | "priority_asc";
 };
 
 export type Customer = {
@@ -116,13 +131,22 @@ export const getAccount = cache(() => railsRequest<Account>("/api/v1/me"));
 
 export function getFeedbacks(
   workspaceId: number,
-  filters: { query?: string; status?: string; priority?: string } = {},
+  filters: {
+    query?: string;
+    status?: string;
+    priority?: string;
+    customer_id?: string;
+    tag_id?: string;
+    sort?: string;
+    page?: string;
+    per_page?: string;
+  } = {},
 ) {
   const query = new URLSearchParams(
     Object.entries(filters).filter((entry): entry is [string, string] => Boolean(entry[1])),
   );
   const suffix = query.size ? `?${query.toString()}` : "";
-  return railsRequest<{ feedbacks: Feedback[]; total: number }>(
+  return railsRequest<{ feedbacks: Feedback[]; total: number; meta: FeedbackListMeta }>(
     `/api/v1/workspaces/${workspaceId}/feedbacks${suffix}`,
   );
 }
@@ -142,5 +166,11 @@ export function getCustomers(workspaceId: number) {
 export function getMembers(workspaceId: number) {
   return railsRequest<{ members: Member[] }>(
     `/api/v1/workspaces/${workspaceId}/members`,
+  );
+}
+
+export function getTags(workspaceId: number) {
+  return railsRequest<{ tags: Tag[] }>(
+    `/api/v1/workspaces/${workspaceId}/tags`,
   );
 }

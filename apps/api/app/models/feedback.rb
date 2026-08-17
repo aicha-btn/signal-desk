@@ -6,6 +6,8 @@ class Feedback < ApplicationRecord
   belongs_to :workspace
   belongs_to :customer, optional: true
   belongs_to :created_by, class_name: "User", optional: true
+  has_many :feedback_tags, dependent: :destroy
+  has_many :tags, through: :feedback_tags
 
   enum :status, STATUSES.index_with(&:itself), prefix: true, validate: true
   enum :priority, PRIORITIES.index_with(&:itself), prefix: true, validate: true

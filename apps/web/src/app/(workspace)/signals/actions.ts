@@ -14,6 +14,7 @@ const signalSchema = z.object({
   priority: z.enum(["low", "medium", "high", "critical"]),
   source: z.enum(["internal", "public_form", "email", "support", "call", "other"]),
   customerId: z.string(),
+  tagIds: z.array(z.coerce.number().int().positive()).max(20),
 });
 
 const identitySchema = signalSchema.pick({ workspaceId: true, feedbackId: true });
@@ -37,6 +38,7 @@ export async function updateSignal(
     priority: formData.get("priority"),
     source: formData.get("source"),
     customerId: formData.get("customerId") ?? "",
+    tagIds: formData.getAll("tagIds"),
   });
 
   if (!parsed.success) {
@@ -63,6 +65,7 @@ export async function updateSignal(
           priority: parsed.data.priority,
           source: parsed.data.source,
           customer_id: parsed.data.customerId || null,
+          tag_ids: parsed.data.tagIds,
         }),
       },
     );

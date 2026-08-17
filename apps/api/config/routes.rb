@@ -15,6 +15,7 @@ Rails.application.routes.draw do
         resources :feedbacks, only: %i[index create show update destroy]
         resources :customers, only: %i[index create]
         resources :members, only: :index
+        resources :tags, only: %i[index create update destroy]
       end
     end
   end

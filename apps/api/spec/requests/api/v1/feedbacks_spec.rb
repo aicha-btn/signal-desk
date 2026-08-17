@@ -36,6 +36,67 @@ RSpec.describe "Workspace feedbacks", type: :request do
     expect(response).to have_http_status(:ok)
     expect(response.parsed_body.fetch("total")).to eq(1)
     expect(response.parsed_body.dig("feedbacks", 0, "priority")).to eq("high")
+    expect(response.parsed_body.fetch("meta")).to include(
+      "page" => 1,
+      "per_page" => 20,
+      "total" => 1,
+      "total_pages" => 1,
+      "sort" => "newest"
+    )
+  end
+
+  it "assigns workspace tags and rejects tags from another workspace" do
+    product_tag = Tag.create!(workspace:, name: "Product")
+    other_workspace = create_workspace("Outside")
+    outside_tag = Tag.create!(workspace: other_workspace, name: "Private")
+
+    post "/api/v1/workspaces/#{workspace.id}/feedbacks",
+      params: {
+        title: "Exports need saved views",
+        description: "Customers repeat the same filtering steps every week.",
+        tag_ids: [ product_tag.id ]
+      },
+      headers: authorization_header
+
+    expect(response).to have_http_status(:created)
+    expect(response.parsed_body.dig("feedback", "tags")).to eq([
+      { "id" => product_tag.id, "name" => "Product" }
+    ])
+
+    feedback_id = response.parsed_body.dig("feedback", "id")
+    patch "/api/v1/workspaces/#{workspace.id}/feedbacks/#{feedback_id}",
+      params: { tag_ids: [ outside_tag.id ] },
+      headers: authorization_header
+
+    expect(response).to have_http_status(:not_found)
+    expect(Feedback.find(feedback_id).tag_ids).to eq([ product_tag.id ])
+  end
+
+  it "filters by tag, sorts by priority and paginates deterministically" do
+    tag = Tag.create!(workspace:, name: "Retention")
+    low = create_feedback("Low pressure", :low)
+    high = create_feedback("High pressure", :high, tags: [ tag ])
+    critical = create_feedback("Critical pressure", :critical, tags: [ tag ])
+
+    get "/api/v1/workspaces/#{workspace.id}/feedbacks",
+      params: { tag_id: tag.id, sort: "priority_desc", page: 1, per_page: 1 },
+      headers: authorization_header
+
+    expect(response).to have_http_status(:ok)
+    expect(response.parsed_body.fetch("total")).to eq(2)
+    expect(response.parsed_body.dig("feedbacks", 0, "id")).to eq(critical.id)
+    expect(response.parsed_body.fetch("meta")).to include(
+      "page" => 1,
+      "per_page" => 1,
+      "total_pages" => 2,
+      "sort" => "priority_desc"
+    )
+
+    get "/api/v1/workspaces/#{workspace.id}/feedbacks",
+      params: { sort: "priority_asc", page: 1, per_page: 2 },
+      headers: authorization_header
+
+    expect(response.parsed_body.fetch("feedbacks").pluck("id")).to eq([ low.id, high.id ])
   end
 
   it "rejects a customer from another workspace" do
@@ -105,6 +166,17 @@ RSpec.describe "Workspace feedbacks", type: :request do
       name:,
       slug: "#{name.parameterize}-#{SecureRandom.hex(2)}",
       public_form_token: SecureRandom.urlsafe_base64(18)
+    )
+  end
+
+  def create_feedback(title, priority, tags: [])
+    Feedback.create!(
+      workspace:,
+      created_by: user,
+      title:,
+      description: "Enough context to make this Signal useful.",
+      priority:,
+      tags:
     )
   end
 end

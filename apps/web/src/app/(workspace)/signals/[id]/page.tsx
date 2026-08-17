@@ -5,7 +5,7 @@ import { CalendarDays, CircleUserRound, Link2, RadioTower } from "lucide-react";
 import { DeleteSignalButton } from "@/components/workspace/delete-signal-button";
 import { PageHeader } from "@/components/workspace/page-header";
 import { SignalDetailForm } from "@/components/workspace/signal-detail-form";
-import { getAccount, getCustomers, getFeedback, RailsApiError } from "@/lib/rails-api";
+import { getAccount, getCustomers, getFeedback, getTags, RailsApiError } from "@/lib/rails-api";
 
 export const metadata: Metadata = { title: "Signal Detail" };
 
@@ -32,7 +32,7 @@ export default async function SignalDetailPage({
 
   const account = await getAccount();
   const workspace = account!.workspaces[0];
-  const [feedbackResult, customerResult] = await loadSignalData(workspace.id, feedbackId);
+  const [feedbackResult, customerResult, tagResult] = await loadSignalData(workspace.id, feedbackId);
   if (!feedbackResult) notFound();
 
   const feedback = feedbackResult.feedback;
@@ -62,7 +62,7 @@ export default async function SignalDetailPage({
                 {feedback.priority.toUpperCase()} PRIORITY
               </span>
             </div>
-            <SignalDetailForm workspaceId={workspace.id} feedback={feedback} customers={customerResult?.customers ?? []} />
+            <SignalDetailForm workspaceId={workspace.id} feedback={feedback} customers={customerResult?.customers ?? []} tags={tagResult?.tags ?? []} />
           </section>
 
           <aside className="self-start border-2 border-[var(--ink-950)] bg-[var(--paper-0)]">
@@ -92,6 +92,7 @@ async function loadSignalData(workspaceId: number, feedbackId: number) {
     return await Promise.all([
       getFeedback(workspaceId, feedbackId),
       getCustomers(workspaceId),
+      getTags(workspaceId),
     ]);
   } catch (error) {
     if (error instanceof RailsApiError && error.status === 404) notFound();

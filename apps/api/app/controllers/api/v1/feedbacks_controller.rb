@@ -2,22 +2,18 @@ module Api
   module V1
     class FeedbacksController < WorkspaceController
       def index
-        feedbacks = Current.workspace.feedbacks.includes(:customer, :created_by).order(created_at: :desc)
-        feedbacks = feedbacks.where(status: params[:status]) if Feedback::STATUSES.include?(params[:status])
-        feedbacks = feedbacks.where(priority: params[:priority]) if Feedback::PRIORITIES.include?(params[:priority])
-        if params[:query].present?
-          query = "%#{ActiveRecord::Base.sanitize_sql_like(params[:query].strip)}%"
-          feedbacks = feedbacks.where("feedbacks.title ILIKE :query OR feedbacks.description ILIKE :query", query:)
-        end
+        search = FeedbackSearchQuery.new(workspace: Current.workspace, params:)
+        feedbacks = search.results.includes(:customer, :created_by, :tags)
 
         render json: {
-          feedbacks: feedbacks.limit(100).map { |feedback| feedback_json(feedback) },
-          total: feedbacks.count
+          feedbacks: feedbacks.map { |feedback| feedback_json(feedback) },
+          total: search.total,
+          meta: search.metadata
         }
       end
 
       def show
-        feedback = Current.workspace.feedbacks.includes(:customer, :created_by).find(params[:id])
+        feedback = Current.workspace.feedbacks.includes(:customer, :created_by, :tags).find(params[:id])
         render json: { feedback: feedback_json(feedback) }
       end
 
@@ -25,7 +21,7 @@ module Api
         feedback = Current.workspace.feedbacks.new(feedback_params)
         feedback.created_by = Current.user
 
-        if feedback.save
+        if save_feedback(feedback)
           render json: { feedback: feedback_json(feedback) }, status: :created
         else
           render_validation_errors(feedback)
@@ -34,8 +30,9 @@ module Api
 
       def update
         feedback = Current.workspace.feedbacks.find(params[:id])
+        feedback.assign_attributes(feedback_params)
 
-        if feedback.update(feedback_params)
+        if save_feedback(feedback)
           render json: { feedback: feedback_json(feedback) }
         else
           render_validation_errors(feedback)
@@ -62,6 +59,24 @@ module Api
         permitted
       end
 
+      def save_feedback(feedback)
+        Feedback.transaction do
+          feedback.tags = requested_tags if params.key?(:tag_ids)
+          feedback.save!
+        end
+        true
+      rescue ActiveRecord::RecordInvalid
+        false
+      end
+
+      def requested_tags
+        ids = Array(params[:tag_ids]).compact_blank.map(&:to_i).uniq
+        tags = Current.workspace.tags.where(id: ids).to_a
+        raise ActiveRecord::RecordNotFound unless tags.size == ids.size
+
+        tags
+      end
+
       def feedback_json(feedback)
         {
           id: feedback.id,
@@ -70,6 +85,7 @@ module Api
           status: feedback.status,
           priority: feedback.priority,
           source: feedback.source,
+          tags: feedback.tags.sort_by { |tag| tag.name.downcase }.map { |tag| { id: tag.id, name: tag.name } },
           customer: feedback.customer && {
             id: feedback.customer.id,
             name: feedback.customer.name,
