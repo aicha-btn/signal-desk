@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { PendingButtonContent } from "@/components/ui/pending-feedback";
+import { DesignSelect } from "@/components/ui/design-select";
 import type { Tag } from "@/lib/rails-api";
 
 export type SignalFilterValues = {
@@ -51,42 +52,26 @@ export function SignalFilters({ filters, tags }: { filters: SignalFilterValues; 
           <Search aria-hidden="true" className="absolute top-1/2 left-3 -translate-y-1/2" size={17} />
           <input className="app-form-control pl-10" name="query" defaultValue={filters.query} placeholder="Search title or description" autoFocus={filters.focus === "search"} />
         </label>
-        <label>
+        <div>
           <span className="sr-only">Status</span>
-          <select className="app-form-control" name="status" defaultValue={filters.status ?? ""}>
-            <option value="">All statuses</option><option value="new">New</option><option value="reviewing">Reviewing</option><option value="planned">Planned</option><option value="resolved">Resolved</option>
-          </select>
-        </label>
-        <label>
+          <DesignSelect ariaLabel="Status" name="status" defaultValue={filters.status ?? ""} options={[{ value: "", label: "All statuses" }, { value: "new", label: "New" }, { value: "reviewing", label: "Reviewing" }, { value: "planned", label: "Planned" }, { value: "resolved", label: "Resolved" }]} />
+        </div>
+        <div>
           <span className="sr-only">Priority</span>
-          <select className="app-form-control" name="priority" defaultValue={filters.priority ?? ""}>
-            <option value="">All priorities</option><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option><option value="critical">Critical</option>
-          </select>
-        </label>
-        <label>
+          <DesignSelect ariaLabel="Priority" name="priority" defaultValue={filters.priority ?? ""} options={[{ value: "", label: "All priorities" }, { value: "low", label: "Low" }, { value: "medium", label: "Medium" }, { value: "high", label: "High" }, { value: "critical", label: "Critical" }]} />
+        </div>
+        <div>
           <span className="sr-only">Tag</span>
-          <select className="app-form-control" name="tag_id" defaultValue={filters.tag_id ?? ""}>
-            <option value="">All tags</option>
-            {tags.map((tag) => <option key={tag.id} value={tag.id}>{tag.name}</option>)}
-          </select>
-        </label>
-        <label>
+          <DesignSelect ariaLabel="Tag" name="tag_id" defaultValue={filters.tag_id ?? ""} options={[{ value: "", label: "All tags" }, ...tags.map((tag) => ({ value: String(tag.id), label: tag.name }))]} />
+        </div>
+        <div>
           <span className="sr-only">Sort Signals</span>
-          <select className="app-form-control" name="sort" defaultValue={filters.sort ?? "newest"}>
-            <option value="newest">Newest first</option>
-            <option value="oldest">Oldest first</option>
-            <option value="priority_desc">Priority: high first</option>
-            <option value="priority_asc">Priority: low first</option>
-          </select>
-        </label>
-        <label>
+          <DesignSelect ariaLabel="Sort Signals" name="sort" defaultValue={filters.sort ?? "newest"} options={[{ value: "newest", label: "Newest first" }, { value: "oldest", label: "Oldest first" }, { value: "priority_desc", label: "Priority: high first" }, { value: "priority_asc", label: "Priority: low first" }]} />
+        </div>
+        <div>
           <span className="sr-only">Signals per page</span>
-          <select className="app-form-control" name="per_page" defaultValue={filters.per_page ?? "20"}>
-            <option value="10">10 / page</option>
-            <option value="20">20 / page</option>
-            <option value="50">50 / page</option>
-          </select>
-        </label>
+          <DesignSelect ariaLabel="Signals per page" name="per_page" defaultValue={filters.per_page ?? "20"} options={[{ value: "10", label: "10 / page" }, { value: "20", label: "20 / page" }, { value: "50", label: "50 / page" }]} />
+        </div>
         <button className="button button-dark min-h-11" type="submit" disabled={pending} aria-busy={pending}>
           <PendingButtonContent pending={pending} idleLabel="Apply" pendingLabel="Filtering..." idleIcon={<SlidersHorizontal aria-hidden="true" size={17} />} />
         </button>

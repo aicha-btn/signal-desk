@@ -4,6 +4,8 @@ class Workspace < ApplicationRecord
   has_many :customers, dependent: :destroy
   has_many :feedbacks, dependent: :destroy
   has_many :tags, dependent: :destroy
+  has_many :comments, dependent: :destroy
+  has_many :activity_events, dependent: :destroy
 
   validates :name, presence: true, length: { maximum: 100 }
   validates :slug,

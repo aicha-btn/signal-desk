@@ -474,6 +474,7 @@ La liste accepte :
 - `GET /api/v1/workspaces/:workspace_id/feedbacks/:feedback_id/comments`
 - `POST /api/v1/workspaces/:workspace_id/feedbacks/:feedback_id/comments`
 - `DELETE /api/v1/workspaces/:workspace_id/feedbacks/:feedback_id/comments/:id`
+- `GET /api/v1/workspaces/:workspace_id/feedbacks/:feedback_id/activity_events`
 
 ### Membres et invitations
 
@@ -755,12 +756,12 @@ Services explicitement retires :
 | 3. Auth et workspace | Termine | Supabase Auth SSR, JWT Rails, onboarding, memberships, Pundit et isolation | Elargir les tests de roles en phase 7 |
 | 4. Feedback vertical | Termine | Creation, liste, detail, edition, suppression, erreurs et request specs | Maintenance uniquement |
 | 5. Clients, tags et recherche | Termine | Clients, association client/Signal, tags, recherche, filtres, tri, pagination et URL partageables | Maintenance uniquement |
-| 6. Collaboration et dashboard | En cours | Control Room avec statistiques reelles et etats vides | Commentaires, ActivityEvents et services transactionnels |
+| 6. Collaboration et dashboard | Termine | Control Room, statistiques reelles, commentaires, ActivityEvents, services transactionnels et etats complets | Maintenance uniquement |
 | 7. Membres et emails | Commence | Liste des membres et roles visibles | Invitations, acceptation, Resend et tests owner/admin/member |
 | 8. Formulaire public | A faire | Structure de donnees preparee | Page publique, endpoint, anti-abus et tests de securite |
 | 9. Finition portfolio | En cours | Landing page, design system, CI et premiers deploiements | E2E automatise, accessibilite, donnees demo, README final et captures |
 
-Prochaine priorite : ouvrir la phase collaborative avec les commentaires et les ActivityEvents transactionnels.
+Prochaine priorite : construire les invitations de membres, leur acceptation et l'envoi Resend.
 
 ### Phase 1 - Cadrage et architecture
 
@@ -898,10 +899,9 @@ Cette estimation est volontairement plus haute que le plan initial, car une arch
 
 ## Ordre de priorite immediat
 
-1. Ajouter les commentaires et les ActivityEvents.
-2. Construire les invitations de membres avec Resend.
-3. Livrer le formulaire public et sa protection anti-abus.
-4. Terminer les tests end-to-end, l'accessibilite et les livrables portfolio.
+1. Construire les invitations de membres avec Resend.
+2. Livrer le formulaire public et sa protection anti-abus.
+3. Terminer les tests end-to-end, l'accessibilite et les livrables portfolio.
 
 ## Sources techniques de reference
 

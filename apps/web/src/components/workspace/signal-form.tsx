@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { RadioTower } from "lucide-react";
 import { createSignal, type SignalFormState } from "@/app/(workspace)/signals/new/actions";
 import { PendingButtonContent } from "@/components/ui/pending-feedback";
+import { DesignSelect } from "@/components/ui/design-select";
 import { TagSelector } from "@/components/workspace/tag-selector";
 import type { Customer, Tag } from "@/lib/rails-api";
 
@@ -33,22 +34,15 @@ export function SignalForm({ workspaceId, customers, tags }: { workspaceId: numb
       <div className="grid gap-5 md:grid-cols-3">
         <div>
           <label className="app-form-label" htmlFor="priority">Priority</label>
-          <select className="app-form-control" id="priority" name="priority" defaultValue="medium">
-            <option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option><option value="critical">Critical</option>
-          </select>
+          <DesignSelect id="priority" name="priority" defaultValue="medium" options={[{ value: "low", label: "Low" }, { value: "medium", label: "Medium" }, { value: "high", label: "High" }, { value: "critical", label: "Critical" }]} />
         </div>
         <div>
           <label className="app-form-label" htmlFor="source">Source</label>
-          <select className="app-form-control" id="source" name="source" defaultValue="internal">
-            <option value="internal">Internal note</option><option value="email">Email</option><option value="support">Support</option><option value="call">Call</option><option value="other">Other</option>
-          </select>
+          <DesignSelect id="source" name="source" defaultValue="internal" options={[{ value: "internal", label: "Internal note" }, { value: "email", label: "Email" }, { value: "support", label: "Support" }, { value: "call", label: "Call" }, { value: "other", label: "Other" }]} />
         </div>
         <div>
           <label className="app-form-label" htmlFor="customerId">Customer</label>
-          <select className="app-form-control" id="customerId" name="customerId" defaultValue="">
-            <option value="">No customer attached</option>
-            {customers.map((customer) => <option key={customer.id} value={customer.id}>{customer.company || customer.name}</option>)}
-          </select>
+          <DesignSelect id="customerId" name="customerId" defaultValue="" options={[{ value: "", label: "No customer attached" }, ...customers.map((customer) => ({ value: String(customer.id), label: customer.company || customer.name }))]} />
         </div>
       </div>
       <TagSelector tags={tags} />

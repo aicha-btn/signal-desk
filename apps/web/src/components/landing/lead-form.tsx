@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { ArrowRight, Check } from "lucide-react";
 import { PendingButtonContent } from "@/components/ui/pending-feedback";
+import { DesignSelect } from "@/components/ui/design-select";
 import {
   joinEarlyAccess,
   type LeadFormState,
@@ -78,25 +79,37 @@ export function LeadForm() {
         <div className="grid gap-5 sm:grid-cols-2">
           <div>
             <label className="form-label" htmlFor="role">Your role</label>
-            <select className="form-control" id="role" name="role" defaultValue="">
-              <option value="">Choose</option>
-              <option value="product">Product</option>
-              <option value="support">Support</option>
-              <option value="leadership">Leadership</option>
-              <option value="founder">Founder</option>
-              <option value="other">Other</option>
-            </select>
+            <DesignSelect
+              id="role"
+              name="role"
+              defaultValue=""
+              controlClassName="form-control"
+              options={[
+                { value: "", label: "Choose" },
+                { value: "product", label: "Product" },
+                { value: "support", label: "Support" },
+                { value: "leadership", label: "Leadership" },
+                { value: "founder", label: "Founder" },
+                { value: "other", label: "Other" },
+              ]}
+            />
           </div>
           <div>
             <label className="form-label" htmlFor="teamSize">Team size</label>
-            <select className="form-control" id="teamSize" name="teamSize" defaultValue="">
-              <option value="">Choose</option>
-              <option value="1-10">1–10</option>
-              <option value="11-50">11–50</option>
-              <option value="51-200">51–200</option>
-              <option value="201-1000">201–1,000</option>
-              <option value="1000+">1,000+</option>
-            </select>
+            <DesignSelect
+              id="teamSize"
+              name="teamSize"
+              defaultValue=""
+              controlClassName="form-control"
+              options={[
+                { value: "", label: "Choose" },
+                { value: "1-10", label: "1–10" },
+                { value: "11-50", label: "11–50" },
+                { value: "51-200", label: "51–200" },
+                { value: "201-1000", label: "201–1,000" },
+                { value: "1000+", label: "1,000+" },
+              ]}
+            />
           </div>
         </div>
 

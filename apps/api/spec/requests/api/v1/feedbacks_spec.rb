@@ -30,6 +30,7 @@ RSpec.describe "Workspace feedbacks", type: :request do
 
     expect(response).to have_http_status(:created)
     expect(response.parsed_body.dig("feedback", "created_by", "email")).to eq("aicha@example.com")
+    expect(Feedback.last.activity_events.pluck(:action)).to eq([ "feedback_created" ])
 
     get "/api/v1/workspaces/#{workspace.id}/feedbacks", headers: authorization_header
 
@@ -139,6 +140,14 @@ RSpec.describe "Workspace feedbacks", type: :request do
     expect(response.parsed_body.dig("feedback", "status")).to eq("planned")
     expect(response.parsed_body.dig("feedback", "priority")).to eq("high")
     expect(response.parsed_body.dig("feedback", "customer")).to be_nil
+    expect(feedback.activity_events.order(:created_at).pluck(:action)).to eq([
+      "feedback_status_changed",
+      "feedback_priority_changed"
+    ])
+    expect(feedback.activity_events.find_by(action: "feedback_status_changed").metadata).to eq(
+      "from" => "new",
+      "to" => "planned"
+    )
 
     expect do
       delete "/api/v1/workspaces/#{workspace.id}/feedbacks/#{feedback.id}", headers: authorization_header

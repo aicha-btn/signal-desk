@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { Save } from "lucide-react";
 import { updateSignal, type SignalDetailFormState } from "@/app/(workspace)/signals/actions";
 import { PendingButtonContent } from "@/components/ui/pending-feedback";
+import { DesignSelect } from "@/components/ui/design-select";
 import { TagSelector } from "@/components/workspace/tag-selector";
 import type { Customer, Feedback, Tag } from "@/lib/rails-api";
 
@@ -47,28 +48,19 @@ export function SignalDetailForm({
       <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
         <div>
           <label className="app-form-label" htmlFor="signal-status">Status</label>
-          <select className="app-form-control" id="signal-status" name="status" defaultValue={feedback.status}>
-            <option value="new">New</option><option value="reviewing">Reviewing</option><option value="planned">Planned</option><option value="resolved">Resolved</option>
-          </select>
+          <DesignSelect id="signal-status" name="status" defaultValue={feedback.status} options={[{ value: "new", label: "New" }, { value: "reviewing", label: "Reviewing" }, { value: "planned", label: "Planned" }, { value: "resolved", label: "Resolved" }]} />
         </div>
         <div>
           <label className="app-form-label" htmlFor="signal-priority">Priority</label>
-          <select className="app-form-control" id="signal-priority" name="priority" defaultValue={feedback.priority}>
-            <option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option><option value="critical">Critical</option>
-          </select>
+          <DesignSelect id="signal-priority" name="priority" defaultValue={feedback.priority} options={[{ value: "low", label: "Low" }, { value: "medium", label: "Medium" }, { value: "high", label: "High" }, { value: "critical", label: "Critical" }]} />
         </div>
         <div>
           <label className="app-form-label" htmlFor="signal-source">Source</label>
-          <select className="app-form-control" id="signal-source" name="source" defaultValue={feedback.source}>
-            <option value="internal">Internal note</option><option value="public_form">Public form</option><option value="email">Email</option><option value="support">Support</option><option value="call">Call</option><option value="other">Other</option>
-          </select>
+          <DesignSelect id="signal-source" name="source" defaultValue={feedback.source} options={[{ value: "internal", label: "Internal note" }, { value: "public_form", label: "Public form" }, { value: "email", label: "Email" }, { value: "support", label: "Support" }, { value: "call", label: "Call" }, { value: "other", label: "Other" }]} />
         </div>
         <div>
           <label className="app-form-label" htmlFor="signal-customer">Customer</label>
-          <select className="app-form-control" id="signal-customer" name="customerId" defaultValue={feedback.customer?.id ?? ""}>
-            <option value="">No customer attached</option>
-            {customers.map((customer) => <option key={customer.id} value={customer.id}>{customer.company || customer.name}</option>)}
-          </select>
+          <DesignSelect id="signal-customer" name="customerId" defaultValue={feedback.customer?.id ?? ""} options={[{ value: "", label: "No customer attached" }, ...customers.map((customer) => ({ value: String(customer.id), label: customer.company || customer.name }))]} />
         </div>
       </div>
 

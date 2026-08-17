@@ -12,7 +12,10 @@ Rails.application.routes.draw do
       resource :me, only: :show, controller: :me
       resource :onboarding, only: :create, controller: :onboarding
       resources :workspaces, only: %i[index create update] do
-        resources :feedbacks, only: %i[index create show update destroy]
+        resources :feedbacks, only: %i[index create show update destroy] do
+          resources :comments, only: %i[index create destroy]
+          resources :activity_events, only: :index
+        end
         resources :customers, only: %i[index create]
         resources :members, only: :index
         resources :tags, only: %i[index create update destroy]

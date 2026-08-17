@@ -4,6 +4,7 @@ module Api
       include Pundit::Authorization
 
       before_action :authenticate_user!
+      rescue_from Pundit::NotAuthorizedError, with: :render_forbidden
 
       private
 
@@ -20,6 +21,12 @@ module Api
         raise SupabaseJwtVerifier::AuthenticationError, "Bearer token is missing" unless scheme == "Bearer" && token.present?
 
         token
+      end
+
+      def render_forbidden
+        render json: {
+          error: { code: "forbidden", message: "You do not have permission to perform this action." }
+        }, status: :forbidden
       end
 
       def pundit_user

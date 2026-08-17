@@ -663,7 +663,11 @@ Textarea :
 ### 19.5 Selecteurs
 
 - controle segmente pour un choix court de 2 a 4 options frequentes ;
-- select ou menu pour plus de 4 options ;
+- `DesignSelect` pour un choix dans un formulaire ou une barre de filtres ;
+- aucun `<select>` natif visible : le menu doit porter les contours francs, les aplats et les etats de la marque ;
+- le choix reste synchronise dans un champ de formulaire nomme pour les Server Actions ;
+- ouverture au clavier, navigation par fleches, selection par Entree, fermeture par Echap et clic exterieur ;
+- option active Cobalt/Paper, survol Acid/Ink et focus toujours visible ;
 - toggle uniquement pour une valeur binaire ;
 - checkbox pour une selection independante ;
 - aucun menu si toutes les options peuvent tenir clairement a l'ecran.
@@ -1438,6 +1442,13 @@ La validation se fera sur un premier Design Lab, puis sur trois ecrans pilotes :
 3. Signal Feed.
 
 ## 35. Journal des decisions
+
+### `0.3.0` - 17 aout 2026
+
+- remplacement de tous les selects natifs par `DesignSelect` ;
+- menu angulaire avec contraste de marque et dimensions tactiles stables ;
+- contrat clavier et ARIA obligatoire pour chaque liste de choix ;
+- timeline unifiee pour commentaires et ActivityEvents dans le detail d'un Signal.
 
 ### `0.2.0` - 17 aout 2026
 

@@ -73,6 +73,30 @@ export type Member = {
   };
 };
 
+export type Comment = {
+  id: number;
+  body: string;
+  author: {
+    id: number;
+    email: string;
+    display_name: string | null;
+  };
+  can_delete: boolean;
+  created_at: string;
+};
+
+export type ActivityEvent = {
+  id: number;
+  action: "feedback_created" | "feedback_status_changed" | "feedback_priority_changed" | "comment_created";
+  metadata: Record<string, string | number>;
+  actor: {
+    id: number;
+    email: string;
+    display_name: string | null;
+  } | null;
+  created_at: string;
+};
+
 export class RailsApiError extends Error {
   constructor(
     message: string,
@@ -172,5 +196,17 @@ export function getMembers(workspaceId: number) {
 export function getTags(workspaceId: number) {
   return railsRequest<{ tags: Tag[] }>(
     `/api/v1/workspaces/${workspaceId}/tags`,
+  );
+}
+
+export function getComments(workspaceId: number, feedbackId: number) {
+  return railsRequest<{ comments: Comment[] }>(
+    `/api/v1/workspaces/${workspaceId}/feedbacks/${feedbackId}/comments`,
+  );
+}
+
+export function getActivityEvents(workspaceId: number, feedbackId: number) {
+  return railsRequest<{ activity_events: ActivityEvent[] }>(
+    `/api/v1/workspaces/${workspaceId}/feedbacks/${feedbackId}/activity_events`,
   );
 }

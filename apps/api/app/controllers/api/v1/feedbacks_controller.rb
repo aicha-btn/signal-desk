@@ -18,25 +18,28 @@ module Api
       end
 
       def create
-        feedback = Current.workspace.feedbacks.new(feedback_params)
-        feedback.created_by = Current.user
-
-        if save_feedback(feedback)
-          render json: { feedback: feedback_json(feedback) }, status: :created
-        else
-          render_validation_errors(feedback)
-        end
+        feedback = CreateFeedback.call(
+          workspace: Current.workspace,
+          actor: Current.user,
+          attributes: feedback_params,
+          tags: params.key?(:tag_ids) ? requested_tags : []
+        )
+        render json: { feedback: feedback_json(feedback) }, status: :created
+      rescue ActiveRecord::RecordInvalid => error
+        render_validation_errors(error.record)
       end
 
       def update
         feedback = Current.workspace.feedbacks.find(params[:id])
-        feedback.assign_attributes(feedback_params)
-
-        if save_feedback(feedback)
-          render json: { feedback: feedback_json(feedback) }
-        else
-          render_validation_errors(feedback)
-        end
+        feedback = UpdateFeedback.call(
+          feedback:,
+          actor: Current.user,
+          attributes: feedback_params,
+          tags: params.key?(:tag_ids) ? requested_tags : nil
+        )
+        render json: { feedback: feedback_json(feedback) }
+      rescue ActiveRecord::RecordInvalid => error
+        render_validation_errors(error.record)
       end
 
       def destroy
@@ -57,16 +60,6 @@ module Api
           end
         end
         permitted
-      end
-
-      def save_feedback(feedback)
-        Feedback.transaction do
-          feedback.tags = requested_tags if params.key?(:tag_ids)
-          feedback.save!
-        end
-        true
-      rescue ActiveRecord::RecordInvalid
-        false
       end
 
       def requested_tags

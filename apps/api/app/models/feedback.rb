@@ -8,6 +8,8 @@ class Feedback < ApplicationRecord
   belongs_to :created_by, class_name: "User", optional: true
   has_many :feedback_tags, dependent: :destroy
   has_many :tags, through: :feedback_tags
+  has_many :comments, dependent: :destroy
+  has_many :activity_events, dependent: :destroy
 
   enum :status, STATUSES.index_with(&:itself), prefix: true, validate: true
   enum :priority, PRIORITIES.index_with(&:itself), prefix: true, validate: true
