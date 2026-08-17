@@ -42,14 +42,22 @@ module Api
         end
       end
 
+      def destroy
+        feedback = Current.workspace.feedbacks.find(params[:id])
+        feedback.destroy!
+        head :no_content
+      end
+
       private
 
       def feedback_params
         permitted = params.permit(:title, :description, :status, :priority, :source, :customer_id)
-        if permitted[:customer_id].present?
-          Current.workspace.customers.find(permitted[:customer_id])
-        else
-          permitted.delete(:customer_id)
+        if permitted.key?(:customer_id)
+          if permitted[:customer_id].present?
+            Current.workspace.customers.find(permitted[:customer_id])
+          else
+            permitted[:customer_id] = nil
+          end
         end
         permitted
       end

@@ -76,7 +76,7 @@ Rails     -> API, logique metier, validations, permissions, transactions, requet
 Supabase  -> authentification et PostgreSQL manage
 Resend    -> emails d'authentification et emails metier
 Vercel    -> hebergement Next.js
-Koyeb     -> hebergement Rails
+Render    -> hebergement Rails
 GitHub    -> repository, pull requests et CI
 ```
 
@@ -632,7 +632,7 @@ Sentry n'est pas ajoute au MVP.
 Pour commencer :
 
 - logs Vercel pour Next.js ;
-- logs Koyeb pour Rails ;
+- logs Render pour Rails ;
 - logs Supabase pour Auth et PostgreSQL ;
 - identifiant de requete partage entre Next.js et Rails ;
 - endpoint Rails `/up` pour verifier la sante de l'API.
@@ -700,17 +700,13 @@ Vercel Hobby pour le portfolio personnel.
 
 ### Rails
 
-Koyeb Free comme premier choix :
+Render est le choix effectivement deploye pour l'API Rails :
 
-- guide Rails officiel ;
-- deploiement depuis GitHub ;
-- support des monorepos ;
-- 512 Mo de RAM ;
-- instance gratuite qui se met en veille apres une heure sans trafic.
-
-L'API sera configuree avec un seul processus Puma et une concurrence adaptee a 512 Mo.
-
-Render reste une solution de repli simple, mais son service gratuit se met en veille apres seulement quinze minutes et peut prendre environ une minute a redemarrer. Ce comportement est peu adapte a une demonstration de portfolio.
+- deploiement depuis le monorepo GitHub ;
+- un seul processus Puma avec une concurrence limitee ;
+- endpoint `/up` utilise pour la sante et le reveil du service ;
+- cron externe actif uniquement pendant les heures utiles ;
+- demarrage a froid accepte en dehors de cette plage.
 
 ### PostgreSQL et Auth
 
@@ -727,7 +723,7 @@ Resend Free, avec un domaine verifie.
 Services necessaires en production :
 
 1. Vercel pour Next.js ;
-2. Koyeb pour Rails ;
+2. Render pour Rails ;
 3. Supabase pour Auth et PostgreSQL ;
 4. Resend pour les emails.
 
@@ -748,6 +744,22 @@ Services explicitement retires :
 - CAPTCHA externe.
 
 ## Roadmap verticale
+
+### Etat d'avancement au 17 aout 2026
+
+| Phase | Etat | Livre | Reste principal |
+| --- | --- | --- | --- |
+| 1. Cadrage et architecture | Avance | Plan produit, architecture, design system et routeur de contexte | Separer les livrables produit/API dans `docs/` |
+| 2. Fondations techniques | Termine | Monorepo, Next.js, Rails, Supabase, commandes racine, CI, Vercel et Render | Maintenance uniquement |
+| 3. Auth et workspace | Termine | Supabase Auth SSR, JWT Rails, onboarding, memberships, Pundit et isolation | Elargir les tests de roles en phase 7 |
+| 4. Feedback vertical | Termine | Creation, liste, detail, edition, suppression, erreurs et request specs | Maintenance uniquement |
+| 5. Clients, tags et recherche | En cours | Clients, association client/Signal, recherche, filtres et URL partageables | Tags, tri et pagination |
+| 6. Collaboration et dashboard | En cours | Control Room avec statistiques reelles et etats vides | Commentaires, ActivityEvents et services transactionnels |
+| 7. Membres et emails | Commence | Liste des membres et roles visibles | Invitations, acceptation, Resend et tests owner/admin/member |
+| 8. Formulaire public | A faire | Structure de donnees preparee | Page publique, endpoint, anti-abus et tests de securite |
+| 9. Finition portfolio | En cours | Landing page, design system, CI et premiers deploiements | E2E automatise, accessibilite, donnees demo, README final et captures |
+
+Prochaine priorite : terminer la phase 5 avec les tags, le tri et la pagination avant d'ouvrir les commentaires.
 
 ### Phase 1 - Cadrage et architecture
 
@@ -885,12 +897,11 @@ Cette estimation est volontairement plus haute que le plan initial, car une arch
 
 ## Ordre de priorite immediat
 
-1. Creer la structure du monorepo.
-2. Initialiser Next.js et Rails API.
-3. Faire fonctionner les deux applications localement.
-4. Ajouter un endpoint Rails `/up` appele depuis Next.js.
-5. Deployer ce squelette avant de construire les fonctionnalites.
-6. Implementer ensuite l'authentification et le premier parcours vertical.
+1. Terminer les tags, le tri et la pagination du Signal Feed.
+2. Ajouter les commentaires et les ActivityEvents.
+3. Construire les invitations de membres avec Resend.
+4. Livrer le formulaire public et sa protection anti-abus.
+5. Terminer les tests end-to-end, l'accessibilite et les livrables portfolio.
 
 ## Sources techniques de reference
 
@@ -901,7 +912,6 @@ Cette estimation est volontairement plus haute que le plan initial, car une arch
 - Supabase project pausing : https://supabase.com/docs/guides/platform/free-project-pausing
 - Resend avec Rails : https://resend.com/docs/send-with-rails
 - Resend pricing : https://resend.com/docs/knowledge-base/what-is-resend-pricing
-- Koyeb Rails : https://www.koyeb.com/docs/deploy/ruby-on-rails
-- Koyeb free instances : https://www.koyeb.com/docs/reference/instances
+- Render Rails : https://render.com/docs/deploy-rails
 - Vercel Hobby : https://vercel.com/docs/plans/hobby
 - GitHub Actions billing : https://docs.github.com/en/billing/concepts/product-billing/github-actions

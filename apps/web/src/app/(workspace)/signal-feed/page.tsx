@@ -7,7 +7,7 @@ import { getAccount, getFeedbacks } from "@/lib/rails-api";
 
 export const metadata: Metadata = { title: "Signal Feed" };
 
-export default async function SignalFeedPage({ searchParams }: { searchParams: Promise<{ query?: string; status?: string; priority?: string; focus?: string; created?: string }> }) {
+export default async function SignalFeedPage({ searchParams }: { searchParams: Promise<{ query?: string; status?: string; priority?: string; focus?: string; created?: string; deleted?: string }> }) {
   const filters = await searchParams;
   const account = await getAccount();
   const result = await getFeedbacks(account!.workspaces[0].id, filters);
@@ -18,6 +18,7 @@ export default async function SignalFeedPage({ searchParams }: { searchParams: P
       <PageHeader eyebrow="SIGNAL FEED / WORKING QUEUE" title="Every Signal, in context." description="Search the evidence, narrow the pressure and keep every customer observation attached to a decision." action={{ label: "Capture a Signal", href: "/signals/new" }} />
       <div className="mx-auto max-w-[1440px] px-4 py-6 md:px-6 md:py-8">
         {filters.created === "1" && <p className="mb-5 border-2 border-[var(--ink-950)] bg-[var(--mint-500)] px-4 py-3 text-sm font-bold" role="status">Signal captured. It is now live in the feed.</p>}
+        {filters.deleted === "1" && <p className="mb-5 border-2 border-[var(--ink-950)] bg-[var(--cyan-400)] px-4 py-3 text-sm font-bold" role="status">Signal deleted. The feed is up to date.</p>}
         <form className="grid gap-3 border-2 border-[var(--ink-950)] bg-[var(--paper-0)] p-4 md:grid-cols-[minmax(240px,1fr)_180px_180px_auto]" method="get">
           <label className="relative">
             <span className="sr-only">Search Signals</span>

@@ -53,6 +53,39 @@ RSpec.describe "Workspace feedbacks", type: :request do
     expect(response).to have_http_status(:not_found)
   end
 
+  it "shows, updates, detaches a customer and deletes a Signal" do
+    customer = Customer.create!(workspace:, name: "Maya Chen", company: "Northstar")
+    feedback = Feedback.create!(
+      workspace:,
+      customer:,
+      created_by: user,
+      title: "Reports need clearer exports",
+      description: "The finance team cannot identify which filters are active.",
+      priority: :medium,
+      source: :call
+    )
+
+    get "/api/v1/workspaces/#{workspace.id}/feedbacks/#{feedback.id}", headers: authorization_header
+
+    expect(response).to have_http_status(:ok)
+    expect(response.parsed_body.dig("feedback", "customer", "company")).to eq("Northstar")
+
+    patch "/api/v1/workspaces/#{workspace.id}/feedbacks/#{feedback.id}",
+      params: { status: "planned", priority: "high", customer_id: "" },
+      headers: authorization_header
+
+    expect(response).to have_http_status(:ok)
+    expect(response.parsed_body.dig("feedback", "status")).to eq("planned")
+    expect(response.parsed_body.dig("feedback", "priority")).to eq("high")
+    expect(response.parsed_body.dig("feedback", "customer")).to be_nil
+
+    expect do
+      delete "/api/v1/workspaces/#{workspace.id}/feedbacks/#{feedback.id}", headers: authorization_header
+    end.to change(Feedback, :count).by(-1)
+
+    expect(response).to have_http_status(:no_content)
+  end
+
   it "does not expose another workspace" do
     other_workspace = create_workspace("Private")
 

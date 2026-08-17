@@ -96,7 +96,8 @@ export async function railsRequest<T>(
     signal: AbortSignal.timeout(5000),
   });
 
-  const body = (await response.json()) as {
+  const responseText = await response.text();
+  const body = (responseText ? JSON.parse(responseText) : {}) as {
     error?: { message?: string; details?: Record<string, string[]> };
   } & T;
 
@@ -123,6 +124,12 @@ export function getFeedbacks(
   const suffix = query.size ? `?${query.toString()}` : "";
   return railsRequest<{ feedbacks: Feedback[]; total: number }>(
     `/api/v1/workspaces/${workspaceId}/feedbacks${suffix}`,
+  );
+}
+
+export function getFeedback(workspaceId: number, feedbackId: number) {
+  return railsRequest<{ feedback: Feedback }>(
+    `/api/v1/workspaces/${workspaceId}/feedbacks/${feedbackId}`,
   );
 }
 

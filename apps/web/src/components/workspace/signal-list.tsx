@@ -1,4 +1,5 @@
-import { Inbox } from "lucide-react";
+import Link from "next/link";
+import { ArrowUpRight, Inbox } from "lucide-react";
 import type { Feedback } from "@/lib/rails-api";
 
 const statusLabels: Record<Feedback["status"], string> = {
@@ -39,9 +40,17 @@ export function SignalList({ feedbacks, compact = false }: { feedbacks: Feedback
       </div>
       <div className="divide-y-2 divide-[var(--ink-950)]">
         {visibleFeedbacks.map((feedback) => (
-          <article key={feedback.id} className="grid gap-4 px-4 py-5 transition-colors hover:bg-[var(--canvas-50)] md:grid-cols-[minmax(0,1.8fr)_minmax(130px,0.7fr)_120px_110px_105px] md:items-center md:px-5">
+          <Link
+            key={feedback.id}
+            href={`/signals/${feedback.id}`}
+            aria-label={`Open Signal: ${feedback.title}`}
+            className="group grid gap-4 px-4 py-5 transition-colors hover:bg-[var(--canvas-50)] md:grid-cols-[minmax(0,1.8fr)_minmax(130px,0.7fr)_120px_110px_105px] md:items-center md:px-5"
+          >
             <div className="min-w-0">
-              <h3 className="truncate font-display text-lg font-bold">{feedback.title}</h3>
+              <h3 className="flex items-center gap-2 truncate font-display text-lg font-bold">
+                <span className="truncate">{feedback.title}</span>
+                <ArrowUpRight aria-hidden="true" className="shrink-0 opacity-0 transition-opacity group-hover:opacity-100" size={17} />
+              </h3>
               <p className="mt-1 line-clamp-2 text-sm leading-5 text-[var(--ink-600)]">{feedback.description}</p>
             </div>
             <p className="text-sm font-semibold">{feedback.customer?.company || feedback.customer?.name || "Internal"}</p>
@@ -50,7 +59,7 @@ export function SignalList({ feedbacks, compact = false }: { feedbacks: Feedback
             <time className="font-mono text-[10px] text-[var(--ink-600)]" dateTime={feedback.created_at}>
               {new Intl.DateTimeFormat("en", { day: "2-digit", month: "short" }).format(new Date(feedback.created_at)).toUpperCase()}
             </time>
-          </article>
+          </Link>
         ))}
       </div>
     </div>
