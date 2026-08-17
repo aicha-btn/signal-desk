@@ -48,6 +48,19 @@ Charger tout de meme le topic `copy` si la tache modifie :
 - des reponses API directement affichees ;
 - des etats de chargement ou de reconnexion.
 
+## Push et verification de production
+
+Apres chaque push sur `main` :
+
+1. Declencher explicitement le deploiement frontend avec `pnpm dlx vercel@latest --prod --yes` depuis la racine.
+2. Attendre la fin complete de la commande et verifier que Vercel retourne `readyState: READY`.
+3. Verifier que le deploiement est bien alias sur `https://signal-desk-lake.vercel.app`.
+4. Effectuer au minimum une requete HTTP sur la landing page et une sur une route authentifiee.
+5. Pour une modification Rails, attendre egalement le deploiement Render et verifier `/up` ainsi qu'une route concernee par le changement.
+6. Ne jamais annoncer qu'un changement est en production sur la seule base d'un push GitHub.
+
+Si la CLI Vercel n'est plus authentifiee ou si le projet n'est plus lie, signaler le blocage precis a l'utilisatrice et demander uniquement l'action d'acces necessaire.
+
 ## Hierarchie documentaire
 
 En cas de contradiction :
