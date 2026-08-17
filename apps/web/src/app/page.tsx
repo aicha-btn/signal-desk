@@ -97,6 +97,7 @@ export default async function Home() {
 
   return (
     <main className="overflow-x-clip bg-[var(--paper-0)] text-[var(--ink-950)]">
+      <a className="skip-link" href="#top">Skip to content</a>
       <MotionController />
       <script
         type="application/ld+json"
@@ -141,6 +142,7 @@ export default async function Home() {
 
       <section
         id="top"
+        tabIndex={-1}
         aria-labelledby="hero-title"
         className="relative isolate min-h-[640px] overflow-hidden border-b-2 border-[var(--ink-950)] bg-[var(--paper-0)] sm:min-h-[680px] lg:h-[calc(100svh-110px)] lg:min-h-[650px] lg:max-h-[850px]"
       >

@@ -27,6 +27,7 @@ export default async function OnboardingPage() {
 
   return (
     <main className="min-h-screen bg-[var(--canvas-50)]">
+      <a className="skip-link" href="#onboarding-form">Skip to workspace setup</a>
       <header className="flex h-16 items-center justify-between border-b-2 border-[var(--ink-950)] bg-[var(--paper-0)] px-4 md:px-8">
         <span className="font-display text-xl font-extrabold">SignalDesk</span>
         <span className="font-mono text-[11px] text-[var(--ink-600)]">SETUP / 01 OF 01</span>
@@ -48,7 +49,7 @@ export default async function OnboardingPage() {
           </ul>
         </section>
 
-        <section className="flex items-center bg-[var(--paper-0)] px-4 py-14 md:px-12 lg:col-span-8 lg:px-20">
+        <section id="onboarding-form" tabIndex={-1} className="flex items-center bg-[var(--paper-0)] px-4 py-14 md:px-12 lg:col-span-8 lg:px-20">
           <div className="w-full max-w-[720px]">
             <p className="eyebrow mb-5">WORKSPACE IDENTITY</p>
             <h2 className="max-w-2xl font-display text-4xl font-bold leading-[0.98] md:text-6xl">

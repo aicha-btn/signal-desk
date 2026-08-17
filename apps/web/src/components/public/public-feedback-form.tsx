@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Check, RotateCcw, Send } from "lucide-react";
 import { PendingButtonContent } from "@/components/ui/pending-feedback";
 
@@ -15,6 +15,14 @@ const initialState: SubmissionState = { status: "idle", message: "" };
 export function PublicFeedbackForm({ apiUrl, slug }: { apiUrl: string; slug: string }) {
   const [state, setState] = useState(initialState);
   const [pending, setPending] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const errorRef = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    if (state.status !== "error") return;
+    const firstInvalidField = formRef.current?.querySelector<HTMLElement>("[aria-invalid='true']");
+    (firstInvalidField ?? errorRef.current)?.focus();
+  }, [state]);
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -62,31 +70,31 @@ export function PublicFeedbackForm({ apiUrl, slug }: { apiUrl: string; slug: str
   }
 
   return (
-    <form className="grid gap-6" onSubmit={submit} noValidate>
+    <form ref={formRef} className="grid gap-6" onSubmit={submit} noValidate>
       <div className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
         <input name="website" type="text" tabIndex={-1} autoComplete="off" aria-hidden="true" />
       </div>
 
       <div>
         <label className="app-form-label" htmlFor="public-title">What happened? *</label>
-        <input className="app-form-control" id="public-title" name="title" minLength={5} maxLength={160} placeholder="A short, specific summary" required aria-invalid={Boolean(state.fieldErrors?.title)} />
-        {state.fieldErrors?.title?.[0] && <p className="mt-1 text-sm text-[var(--coral-500)]">{state.fieldErrors.title[0]}</p>}
+        <input className="app-form-control" id="public-title" name="title" minLength={5} maxLength={160} placeholder="A short, specific summary" required aria-invalid={Boolean(state.fieldErrors?.title)} aria-describedby={state.fieldErrors?.title ? "public-title-error" : undefined} />
+        {state.fieldErrors?.title?.[0] && <p id="public-title-error" className="mt-1 text-sm text-[var(--coral-500)]">{state.fieldErrors.title[0]}</p>}
       </div>
 
       <div>
         <label className="app-form-label" htmlFor="public-description">Give us the useful context. *</label>
-        <textarea className="app-form-control min-h-40 resize-y py-3" id="public-description" name="description" minLength={20} maxLength={4000} placeholder="What were you trying to do, what got in the way, and what would better look like?" required aria-invalid={Boolean(state.fieldErrors?.description)} />
-        {state.fieldErrors?.description?.[0] && <p className="mt-1 text-sm text-[var(--coral-500)]">{state.fieldErrors.description[0]}</p>}
+        <textarea className="app-form-control min-h-40 resize-y py-3" id="public-description" name="description" minLength={20} maxLength={4000} placeholder="What were you trying to do, what got in the way, and what would better look like?" required aria-invalid={Boolean(state.fieldErrors?.description)} aria-describedby={state.fieldErrors?.description ? "public-description-error" : undefined} />
+        {state.fieldErrors?.description?.[0] && <p id="public-description-error" className="mt-1 text-sm text-[var(--coral-500)]">{state.fieldErrors.description[0]}</p>}
       </div>
 
       <fieldset className="grid gap-4 border-t-2 border-[var(--ink-950)] pt-6 sm:grid-cols-2">
         <legend className="mb-4 font-display text-lg font-bold">Stay reachable <span className="font-normal text-[var(--ink-600)]">(optional)</span></legend>
-        <div><label className="app-form-label" htmlFor="public-name">Your name</label><input className="app-form-control" id="public-name" name="name" maxLength={100} autoComplete="name" placeholder="Maya Chen" />{state.fieldErrors?.name?.[0] && <p className="mt-1 text-sm text-[var(--coral-500)]">{state.fieldErrors.name[0]}</p>}</div>
-        <div><label className="app-form-label" htmlFor="public-company">Company</label><input className="app-form-control" id="public-company" name="company" maxLength={100} autoComplete="organization" placeholder="Northstar" />{state.fieldErrors?.company?.[0] && <p className="mt-1 text-sm text-[var(--coral-500)]">{state.fieldErrors.company[0]}</p>}</div>
-        <div className="sm:col-span-2"><label className="app-form-label" htmlFor="public-email">Work email</label><input className="app-form-control" id="public-email" name="email" type="email" maxLength={254} autoComplete="email" placeholder="maya@company.com" aria-invalid={Boolean(state.fieldErrors?.email)} />{state.fieldErrors?.email?.[0] && <p className="mt-1 text-sm text-[var(--coral-500)]">{state.fieldErrors.email[0]}</p>}<p className="mt-2 text-xs leading-5 text-[var(--ink-600)]">Only provide an email if the team may contact you about this Signal.</p></div>
+        <div><label className="app-form-label" htmlFor="public-name">Your name</label><input className="app-form-control" id="public-name" name="name" maxLength={100} autoComplete="name" placeholder="Maya Chen" aria-invalid={Boolean(state.fieldErrors?.name)} aria-describedby={state.fieldErrors?.name ? "public-name-error" : undefined} />{state.fieldErrors?.name?.[0] && <p id="public-name-error" className="mt-1 text-sm text-[var(--coral-500)]">{state.fieldErrors.name[0]}</p>}</div>
+        <div><label className="app-form-label" htmlFor="public-company">Company</label><input className="app-form-control" id="public-company" name="company" maxLength={100} autoComplete="organization" placeholder="Northstar" aria-invalid={Boolean(state.fieldErrors?.company)} aria-describedby={state.fieldErrors?.company ? "public-company-error" : undefined} />{state.fieldErrors?.company?.[0] && <p id="public-company-error" className="mt-1 text-sm text-[var(--coral-500)]">{state.fieldErrors.company[0]}</p>}</div>
+        <div className="sm:col-span-2"><label className="app-form-label" htmlFor="public-email">Work email</label><input className="app-form-control" id="public-email" name="email" type="email" maxLength={254} autoComplete="email" placeholder="maya@company.com" aria-invalid={Boolean(state.fieldErrors?.email)} aria-describedby={state.fieldErrors?.email ? "public-email-error public-email-help" : "public-email-help"} />{state.fieldErrors?.email?.[0] && <p id="public-email-error" className="mt-1 text-sm text-[var(--coral-500)]">{state.fieldErrors.email[0]}</p>}<p id="public-email-help" className="mt-2 text-xs leading-5 text-[var(--ink-600)]">Only provide an email if the team may contact you about this Signal.</p></div>
       </fieldset>
 
-      {state.status === "error" && <p className="border-l-4 border-[var(--coral-500)] pl-3 text-sm" role="alert">{state.message}</p>}
+      {state.status === "error" && <p ref={errorRef} className="border-l-4 border-[var(--coral-500)] pl-3 text-sm" role="alert" tabIndex={-1}>{state.message}</p>}
       <button className="button button-primary min-h-12 w-full sm:w-auto sm:justify-self-start" type="submit" disabled={pending} aria-busy={pending}>
         <PendingButtonContent pending={pending} idleLabel="Send the Signal" pendingLabel="Sending Signal..." idleIcon={<Send aria-hidden="true" size={18} />} />
       </button>

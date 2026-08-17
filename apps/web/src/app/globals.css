@@ -64,6 +64,24 @@ a {
   outline-offset: 3px;
 }
 
+.skip-link {
+  position: fixed;
+  z-index: 200;
+  top: 0;
+  left: 1rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--ink-950);
+  background: var(--acid-400);
+  color: var(--ink-950);
+  font-weight: 700;
+  transform: translateY(-140%);
+  transition: transform 120ms ease;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0.75rem);
+}
+
 .eyebrow {
   font-family: var(--font-ibm-plex), monospace;
   font-size: 0.72rem;

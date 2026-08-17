@@ -12,6 +12,10 @@ type SupabaseLocalConfig = {
   serviceRoleKey: string;
 };
 
+export type LocalPublicWorkspace = {
+  slug: string;
+};
+
 const rootDirectory = process.cwd();
 
 export async function createLocalAccount(): Promise<LocalAccount> {
@@ -47,6 +51,24 @@ export async function removeLocalAccount(account: LocalAccount | undefined) {
   if (!response.ok && response.status !== 404) {
     throw new Error(`Could not remove the local E2E account: ${response.status}`);
   }
+}
+
+export function createLocalPublicWorkspace(): LocalPublicWorkspace {
+  const slug = `signaldesk-public-e2e-${Date.now()}-${Math.random().toString(16).slice(2, 8)}`;
+  const code = [
+    "Workspace.create!(",
+    'name: "Public E2E Studio",',
+    `slug: ${JSON.stringify(slug)},`,
+    "public_form_token: SecureRandom.urlsafe_base64(18),",
+    "public_form_enabled: true)",
+  ].join(" ");
+  runRails(code);
+  return { slug };
+}
+
+export function removeLocalPublicWorkspace(workspace: LocalPublicWorkspace | undefined) {
+  if (!workspace) return;
+  runRails(`Workspace.find_by(slug: ${JSON.stringify(workspace.slug)})&.destroy!`);
 }
 
 function readSupabaseLocalConfig(): SupabaseLocalConfig {
@@ -88,8 +110,13 @@ function adminRequest(config: SupabaseLocalConfig, pathname: string, init: Reque
 
 function cleanupRailsUser(supabaseUserId: string) {
   const code = `User.find_by(supabase_user_id: ${JSON.stringify(supabaseUserId)})&.destroy!`;
-  execFileSync("mise", ["exec", "--", "bundle", "exec", "rails", "runner", code], {
+  runRails(code);
+}
+
+function runRails(code: string) {
+  return execFileSync("mise", ["exec", "--", "bundle", "exec", "rails", "runner", code], {
     cwd: path.join(rootDirectory, "apps/api"),
-    stdio: "ignore",
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
   });
 }

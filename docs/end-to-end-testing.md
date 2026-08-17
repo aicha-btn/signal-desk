@@ -13,8 +13,10 @@ The Playwright suite covers the main authenticated vertical slice:
 7. verify that it appears in the Signal Feed;
 8. remove the temporary Rails and Supabase records.
 
-The same run uses Axe on the login page, Control Room, Signal creation form and
-Signal Feed. It fails on any WCAG 2.2 A or AA violation.
+The same run uses Axe across the authenticated journey and public entry points.
+Dedicated regressions cover responsive reflow, skip links, custom-select keyboard
+behavior, reduced-motion and public-form error recovery. It fails on any WCAG
+2.2 A or AA violation.
 
 ## Run locally
 

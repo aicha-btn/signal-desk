@@ -25,6 +25,7 @@ export default async function LoginPage({
 
   return (
     <main className="grid min-h-screen bg-[var(--paper-0)] lg:grid-cols-12">
+      <a className="skip-link" href="#authentication-form">Skip to authentication</a>
       <section className="relative flex min-h-[330px] flex-col justify-between overflow-hidden border-b-2 border-[var(--ink-950)] bg-[var(--cobalt-500)] p-6 text-[var(--paper-0)] md:p-10 lg:col-span-5 lg:min-h-screen lg:border-r-2 lg:border-b-0">
         <div aria-hidden="true" className="auth-signal-field">
           <span className="auth-signal-shape auth-signal-shape-one" />
@@ -49,7 +50,7 @@ export default async function LoginPage({
         </div>
       </section>
 
-      <section className="flex items-center px-4 py-12 md:px-12 lg:col-span-7 lg:px-20">
+      <section id="authentication-form" tabIndex={-1} className="flex items-center px-4 py-12 md:px-12 lg:col-span-7 lg:px-20">
         <div className="mx-auto w-full max-w-[480px]">
           <p className="eyebrow mb-4">{mode === "login" ? "WELCOME BACK" : "FOUNDING WORKSPACE"}</p>
           <h2 className="font-display text-4xl font-bold leading-none md:text-5xl">

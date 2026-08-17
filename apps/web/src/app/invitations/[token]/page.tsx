@@ -17,11 +17,12 @@ export default async function InvitationPage({ params }: { params: Promise<{ tok
     const next = encodeURIComponent(nextPath);
     return (
       <main className="grid min-h-screen bg-[var(--paper-0)] lg:grid-cols-12">
+        <a className="skip-link" href="#invitation-access">Skip to invitation access</a>
         <section className="flex min-h-[320px] flex-col justify-between border-b-2 border-[var(--ink-950)] bg-[var(--magenta-500)] p-6 md:p-10 lg:col-span-5 lg:min-h-screen lg:border-r-2 lg:border-b-0">
           <Link href="/" className="font-display text-xl font-extrabold">SignalDesk</Link>
           <div><p className="eyebrow mb-4">PRIVATE LINE / INVITATION</p><h1 className="font-display text-5xl font-extrabold leading-[0.92] md:text-6xl">Someone opened a seat for you.</h1></div>
         </section>
-        <section className="flex items-center px-4 py-12 md:px-12 lg:col-span-7 lg:px-20">
+        <section id="invitation-access" tabIndex={-1} className="flex items-center px-4 py-12 md:px-12 lg:col-span-7 lg:px-20">
           <div className="mx-auto w-full max-w-[560px]">
             <KeyRound aria-hidden="true" className="mb-7 text-[var(--cobalt-500)]" size={42} />
             <p className="eyebrow mb-3">IDENTITY CHECK</p>
@@ -59,8 +60,9 @@ export default async function InvitationPage({ params }: { params: Promise<{ tok
 
   return (
       <main className="min-h-screen bg-[var(--paper-0)]">
+        <a className="skip-link" href="#invitation-details">Skip to invitation details</a>
         <header className="border-b-2 border-[var(--ink-950)] px-4 py-5 md:px-8"><Link href="/" className="font-display text-2xl font-extrabold">SignalDesk</Link></header>
-        <div className="mx-auto grid max-w-[1200px] gap-0 border-x-2 border-[var(--ink-950)] lg:grid-cols-12">
+        <div id="invitation-details" tabIndex={-1} className="mx-auto grid max-w-[1200px] gap-0 border-x-2 border-[var(--ink-950)] lg:grid-cols-12">
           <section className="flex min-h-[360px] flex-col justify-between border-b-2 border-[var(--ink-950)] bg-[var(--cobalt-500)] p-6 text-[var(--paper-0)] md:p-10 lg:col-span-5 lg:min-h-[calc(100vh-76px)] lg:border-r-2 lg:border-b-0">
             <div className="flex size-14 items-center justify-center border-2 border-[var(--paper-0)] bg-[var(--acid-400)] text-[var(--ink-950)]"><ShieldCheck aria-hidden="true" size={28} /></div>
             <div><p className="eyebrow mb-4 text-[var(--acid-400)]">VERIFIED INVITATION / {invitation.role.toUpperCase()}</p><h1 className="font-display text-5xl font-extrabold leading-[0.92]">Your next room is {invitation.workspace?.name}.</h1></div>

@@ -23,6 +23,7 @@ test("an operator creates a workspace and publishes its first Signal", async ({ 
 
   await page.waitForURL("**/onboarding");
   await expect(page.getByRole("heading", { name: "One name. One boundary. Clear ownership." })).toBeVisible();
+  await expectAccessible(page, "onboarding");
   await page.getByLabel("Workspace name").fill("SignalDesk E2E Studio");
   await page.getByRole("button", { name: "Open the Control Room" }).click();
 
@@ -37,6 +38,10 @@ test("an operator creates a workspace and publishes its first Signal", async ({ 
   await page.waitForURL("**/signal-feed?created=1");
   await expect(page.getByText("Decision history disappears after refresh", { exact: true })).toBeVisible();
   await expectAccessible(page, "Signal Feed");
+  await page.goto("/members");
+  await expectAccessible(page, "members");
+  await page.goto("/settings");
+  await expectAccessible(page, "settings");
 });
 
 async function expectAccessible(page: Page, context: string) {

@@ -26,6 +26,7 @@ export default async function PublicFormPage({ params }: { params: Promise<{ slu
 
   return (
     <main className="min-h-screen bg-[var(--paper-0)]">
+      <a className="skip-link" href="#public-signal-form">Skip to Signal form</a>
       <header className="border-b-2 border-[var(--ink-950)] px-4 py-4 md:px-8">
         <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-4"><Link href="/" className="font-display text-xl font-extrabold">SignalDesk</Link><span className="font-mono text-[10px]">PUBLIC SIGNAL LINE</span></div>
       </header>
@@ -37,7 +38,7 @@ export default async function PublicFormPage({ params }: { params: Promise<{ slu
         </div>
       </section>
 
-      <div className="mx-auto grid max-w-[1200px] gap-10 px-4 py-10 md:px-8 md:py-14 lg:grid-cols-[minmax(0,720px)_minmax(220px,1fr)]">
+      <div id="public-signal-form" tabIndex={-1} className="mx-auto grid max-w-[1200px] gap-10 px-4 py-10 md:px-8 md:py-14 lg:grid-cols-[minmax(0,720px)_minmax(220px,1fr)]">
         <section aria-labelledby="public-form-heading">
           <p className="eyebrow mb-3">CAPTURE / PUBLIC</p>
           <h2 id="public-form-heading" className="mb-8 font-display text-3xl font-bold leading-none md:text-4xl">Useful detail beats loud urgency.</h2>

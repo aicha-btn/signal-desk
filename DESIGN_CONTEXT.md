@@ -163,6 +163,7 @@ Visualisation de volume entrant, intensity moyenne, vitesse de resolution et ten
 ## Feedback d'interaction
 
 - chaque clic asynchrone produit une reaction perceptible en moins de 100 ms ;
+- chaque page complete commence par un lien d'evitement visible au focus ;
 - navigation interne : rail Signal global, puis squelette stable si les donnees attendent ;
 - action locale : bouton disabled, `aria-busy`, Signal loader fixe et verbe en cours ;
 - aucun loader ne modifie les dimensions de son parent ;

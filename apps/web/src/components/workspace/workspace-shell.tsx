@@ -66,6 +66,7 @@ export function WorkspaceShell({
 
   return (
     <main className="min-h-screen bg-[var(--canvas-50)] text-[var(--ink-950)] lg:grid lg:grid-cols-[232px_minmax(0,1fr)]">
+      <a className="skip-link" href="#workspace-content">Skip to workspace content</a>
       <aside className="hidden border-r-2 border-[var(--ink-950)] bg-[var(--ink-950)] text-[var(--paper-0)] lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col">
         <Link href="/control-room" className="flex h-16 shrink-0 items-center border-b border-[var(--ink-600)] px-5 font-display text-xl font-extrabold">
           SignalDesk
@@ -153,7 +154,7 @@ export function WorkspaceShell({
           </nav>
         </div>
 
-        {children}
+        <div id="workspace-content" tabIndex={-1}>{children}</div>
       </div>
     </main>
   );

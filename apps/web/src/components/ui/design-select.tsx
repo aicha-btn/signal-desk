@@ -31,7 +31,9 @@ export function DesignSelect({
   const triggerRef = useRef<HTMLButtonElement>(null);
   const optionRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const generatedId = useId();
+  const controlId = id ?? `${generatedId}-control`;
   const listboxId = `${generatedId}-listbox`;
+  const accessibleLabel = ariaLabel ?? name.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/[_-]/g, " ");
   const value = selection.source === initialValue ? selection.value : initialValue;
   const selectedIndex = Math.max(0, options.findIndex((option) => option.value === value));
   const selectedOption = options[selectedIndex];
@@ -58,11 +60,18 @@ export function DesignSelect({
   };
 
   const focusRelativeOption = (currentIndex: number, direction: 1 | -1) => {
+    if (!options.length) return;
     let nextIndex = currentIndex;
     do {
       nextIndex = (nextIndex + direction + options.length) % options.length;
     } while (options[nextIndex]?.disabled && nextIndex !== currentIndex);
     optionRefs.current[nextIndex]?.focus();
+  };
+
+  const focusBoundaryOption = (fromEnd: boolean) => {
+    const indexes = options.map((_, index) => index);
+    const enabledIndex = (fromEnd ? indexes.reverse() : indexes).find((index) => !options[index]?.disabled);
+    if (enabledIndex !== undefined) optionRefs.current[enabledIndex]?.focus();
   };
 
   const handleTriggerKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
@@ -73,13 +82,14 @@ export function DesignSelect({
   };
 
   const handleOptionKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
+    if (event.key === "Tab") setOpen(false);
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
       focusRelativeOption(index, event.key === "ArrowDown" ? 1 : -1);
     }
     if (event.key === "Home" || event.key === "End") {
       event.preventDefault();
-      optionRefs.current[event.key === "Home" ? 0 : options.length - 1]?.focus();
+      focusBoundaryOption(event.key === "End");
     }
     if (event.key === "Escape") {
       event.preventDefault();
@@ -93,11 +103,11 @@ export function DesignSelect({
       <input type="hidden" name={name} value={value} />
       <button
         ref={triggerRef}
-        id={id}
+        id={controlId}
         className={`${controlClassName} flex items-center justify-between gap-3 text-left font-semibold transition-colors hover:bg-[var(--acid-400)]`}
         type="button"
         role="combobox"
-        aria-label={ariaLabel}
+        aria-label={accessibleLabel}
         aria-controls={listboxId}
         aria-expanded={open}
         aria-haspopup="listbox"
@@ -113,7 +123,7 @@ export function DesignSelect({
           id={listboxId}
           className="absolute top-[calc(100%+6px)] right-0 left-0 z-50 max-h-72 overflow-y-auto border-2 border-[var(--ink-950)] bg-[var(--paper-0)] shadow-[6px_6px_0_var(--ink-950)]"
           role="listbox"
-          aria-label={ariaLabel}
+          aria-label={`${accessibleLabel} options`}
         >
           {options.map((option, index) => {
             const selected = option.value === value;
@@ -125,6 +135,7 @@ export function DesignSelect({
                 type="button"
                 role="option"
                 aria-selected={selected}
+                tabIndex={-1}
                 disabled={option.disabled}
                 onClick={() => selectOption(index)}
                 onKeyDown={(event) => handleOptionKeyDown(event, index)}
