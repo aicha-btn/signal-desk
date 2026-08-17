@@ -24,6 +24,10 @@ Rails.application.routes.draw do
       resources :invitations, only: :show, param: :token do
         post :accept, on: :member
       end
+      namespace :public do
+        get "forms/:slug", to: "forms#show"
+        post "forms/:slug/feedbacks", to: "forms#create"
+      end
     end
   end
 

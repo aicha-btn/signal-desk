@@ -74,6 +74,33 @@ RSpec.describe "Authenticated workspace flow", type: :request do
     expect(response.parsed_body.fetch("workspaces").pluck("name")).to eq([ "Alpha" ])
   end
 
+  it "lets workspace managers open the public Signal line" do
+    user = User.sync_from_supabase!(claims)
+    workspace = create_workspace("Public")
+    Membership.create!(user:, workspace:, role: :owner)
+
+    patch "/api/v1/workspaces/#{workspace.id}",
+      params: { public_form_enabled: true },
+      headers: authorization_header
+
+    expect(response).to have_http_status(:ok)
+    expect(response.parsed_body.dig("workspace", "public_form_enabled")).to be(true)
+    expect(workspace.reload.public_form_enabled).to be(true)
+  end
+
+  it "forbids members from changing public access" do
+    user = User.sync_from_supabase!(claims)
+    workspace = create_workspace("Member")
+    Membership.create!(user:, workspace:, role: :member)
+
+    patch "/api/v1/workspaces/#{workspace.id}",
+      params: { public_form_enabled: true },
+      headers: authorization_header
+
+    expect(response).to have_http_status(:forbidden)
+    expect(workspace.reload.public_form_enabled).to be(false)
+  end
+
   private
 
   def authorization_header

@@ -177,6 +177,15 @@ Visualisation de volume entrant, intensity moyenne, vitesse de resolution et ten
 - les emails reprennent les angles francs, les aplats Cobalt/Acid et une seule action principale ;
 - aucune fantaisie dans les erreurs d'identite, d'expiration ou de permission.
 
+## Formulaire public
+
+- intensite 7/10 dans l'en-tete Cobalt, puis 3/10 dans la zone de saisie ;
+- experience mobile-first, sans compte et sans navigation parasite ;
+- une seule action principale : `Send the Signal` ;
+- coordonnees toujours facultatives et promesse de confidentialite explicite ;
+- confirmation Acid immediate, erreurs calmes et champs invalides identifies par le texte ;
+- bandeau de confiance visible, sans exposer les details internes de protection.
+
 ## Assets
 
 - landing avec bitmap ou scene immersive pleine largeur ;

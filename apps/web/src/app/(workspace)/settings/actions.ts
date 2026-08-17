@@ -5,6 +5,10 @@ import { z } from "zod";
 import { RailsApiError, railsRequest, type Workspace } from "@/lib/rails-api";
 
 const settingsSchema = z.object({ workspaceId: z.coerce.number().int().positive(), name: z.string().trim().min(2, "Enter a workspace name.").max(100) });
+const publicFormSchema = z.object({
+  workspaceId: z.coerce.number().int().positive(),
+  publicFormEnabled: z.preprocess((value) => value === "true", z.boolean()),
+});
 export type SettingsFormState = { status: "idle" | "error" | "success"; message: string; fieldErrors?: Record<string, string[]> };
 
 export async function updateWorkspace(_previousState: SettingsFormState, formData: FormData): Promise<SettingsFormState> {
@@ -19,4 +23,27 @@ export async function updateWorkspace(_previousState: SettingsFormState, formDat
   }
   revalidatePath("/", "layout");
   return { status: "success", message: "Workspace settings saved." };
+}
+
+export async function updatePublicForm(_previousState: SettingsFormState, formData: FormData): Promise<SettingsFormState> {
+  const parsed = publicFormSchema.safeParse({
+    workspaceId: formData.get("workspaceId"),
+    publicFormEnabled: formData.getAll("publicFormEnabled").includes("true") ? "true" : "false",
+  });
+  if (!parsed.success) return { status: "error", message: "The public form setting is invalid." };
+
+  try {
+    const result = await railsRequest<{ workspace: Workspace }>(
+      `/api/v1/workspaces/${parsed.data.workspaceId}`,
+      { method: "PATCH", body: JSON.stringify({ public_form_enabled: parsed.data.publicFormEnabled }) },
+    );
+    if (!result) return { status: "error", message: "Your session has expired." };
+  } catch (error) {
+    if (error instanceof RailsApiError) return { status: "error", message: error.message };
+    return { status: "error", message: "The public form setting could not be saved." };
+  }
+
+  revalidatePath("/settings");
+  revalidatePath("/", "layout");
+  return { status: "success", message: parsed.data.publicFormEnabled ? "Public Signal line opened." : "Public Signal line closed." };
 }

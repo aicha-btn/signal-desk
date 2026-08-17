@@ -760,10 +760,10 @@ Services explicitement retires :
 | 5. Clients, tags et recherche | Termine | Clients, association client/Signal, tags, recherche, filtres, tri, pagination et URL partageables | Maintenance uniquement |
 | 6. Collaboration et dashboard | Termine | Control Room, statistiques reelles, commentaires, ActivityEvents, services transactionnels et etats complets | Maintenance uniquement |
 | 7. Membres et emails | Termine cote code | Invitations temporaires, acceptation securisee, Action Mailer, Resend et tests owner/admin/member | Ajouter la cle et l'expediteur verifies sur Render |
-| 8. Formulaire public | A faire | Structure de donnees preparee | Page publique, endpoint, anti-abus et tests de securite |
+| 8. Formulaire public | Termine | Page publique, configuration workspace, endpoint anonyme, anti-abus et tests de securite | Maintenance uniquement |
 | 9. Finition portfolio | En cours | Landing page, design system, CI et premiers deploiements | E2E automatise, accessibilite, donnees demo, README final et captures |
 
-Prochaine priorite : livrer le formulaire public et sa protection anti-abus.
+Prochaine priorite : automatiser le parcours principal de bout en bout et auditer l'accessibilite.
 
 ### Phase 1 - Cadrage et architecture
 
@@ -849,11 +849,13 @@ Objectif : pouvoir creer et consulter un feedback de bout en bout.
 
 ### Phase 8 - Formulaire public
 
-- page publique Next.js ;
-- endpoint public Rails ;
-- protection anti-abus ;
-- creation d'un feedback sans compte ;
-- tests de securite essentiels.
+- [x] page publique Next.js responsive ;
+- [x] activation par workspace et URL copiable dans Settings ;
+- [x] endpoint public Rails a surface de donnees minimale ;
+- [x] creation d'un feedback avec ou sans coordonnees ;
+- [x] honeypot, limites de taille et rate limits par IP/workspace ;
+- [x] CORS restreint aux origines SignalDesk ;
+- [x] tests de validation, permissions et anti-abus.
 
 ### Phase 9 - Finition portfolio
 
@@ -901,9 +903,9 @@ Cette estimation est volontairement plus haute que le plan initial, car une arch
 
 ## Ordre de priorite immediat
 
-1. Livrer le formulaire public et sa protection anti-abus.
-2. Terminer les tests end-to-end et l'accessibilite.
-3. Finaliser les donnees demo et les livrables portfolio.
+1. Terminer les tests end-to-end et l'accessibilite.
+2. Finaliser les donnees demo et les livrables portfolio.
+3. Produire les captures et verifier la demonstration de production.
 
 ## Sources techniques de reference
 
@@ -917,3 +919,4 @@ Cette estimation est volontairement plus haute que le plan initial, car une arch
 - Render Rails : https://render.com/docs/deploy-rails
 - Vercel Hobby : https://vercel.com/docs/plans/hobby
 - GitHub Actions billing : https://docs.github.com/en/billing/concepts/product-billing/github-actions
+- Rails controller rate limiting : https://api.rubyonrails.org/classes/ActionController/RateLimiting/ClassMethods.html

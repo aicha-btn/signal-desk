@@ -55,6 +55,14 @@ creates a `Workspace` and an `owner` `Membership` in one transaction. Business
 tables have RLS enabled with no direct browser policies; Rails remains their only
 application access path.
 
+## Public Signal form
+
+Workspace owners and admins can enable a public feedback URL from Settings. The
+form creates feedback through Rails without requiring a SignalDesk account. It
+uses strict input limits, a honeypot, origin-restricted CORS and Rails rate limits;
+no CAPTCHA, Redis or additional anti-abuse service is required for the current
+single-process deployment. See `docs/public-signal-form.md` for the full contract.
+
 ## Production
 
 - Web: https://signal-desk-lake.vercel.app

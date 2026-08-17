@@ -88,6 +88,11 @@ export type WorkspaceInvitation = {
   workspace?: Pick<Workspace, "id" | "name" | "slug">;
 };
 
+export type PublicFeedbackForm = {
+  workspace_name: string;
+  slug: string;
+};
+
 export type Comment = {
   id: number;
   body: string;
@@ -150,6 +155,33 @@ export async function railsRequest<T>(
     signal: AbortSignal.timeout(5000),
   });
 
+  const responseText = await response.text();
+  const body = (responseText ? JSON.parse(responseText) : {}) as {
+    error?: { message?: string; details?: Record<string, string[]> };
+  } & T;
+
+  if (!response.ok) {
+    throw new RailsApiError(
+      body.error?.message ?? "The request could not be completed.",
+      response.status,
+      body.error?.details,
+    );
+  }
+
+  return body;
+}
+
+export async function publicRailsRequest<T>(
+  path: string,
+  init: RequestInit = {},
+): Promise<T> {
+  const railsApiUrl = process.env.RAILS_API_URL ?? "http://127.0.0.1:3001";
+  const response = await fetch(`${railsApiUrl}${path}`, {
+    ...init,
+    headers: { "Content-Type": "application/json", ...init.headers },
+    cache: "no-store",
+    signal: AbortSignal.timeout(7000),
+  });
   const responseText = await response.text();
   const body = (responseText ? JSON.parse(responseText) : {}) as {
     error?: { message?: string; details?: Record<string, string[]> };
