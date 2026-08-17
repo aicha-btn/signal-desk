@@ -159,6 +159,16 @@ Visualisation de volume entrant, intensity moyenne, vitesse de resolution et ten
 - `prefers-reduced-motion` obligatoire ;
 - l'interface reste complete sans animation.
 
+## Feedback d'interaction
+
+- chaque clic asynchrone produit une reaction perceptible en moins de 100 ms ;
+- navigation interne : rail Signal global, puis squelette stable si les donnees attendent ;
+- action locale : bouton disabled, `aria-busy`, Signal loader fixe et verbe en cours ;
+- aucun loader ne modifie les dimensions de son parent ;
+- aucun spinner plein ecran si du contenu reste disponible ;
+- reduced-motion remplace le mouvement par un etat statique visible ;
+- contrat d'implementation : `docs/loading-and-action-feedback.md`.
+
 ## Assets
 
 - landing avec bitmap ou scene immersive pleine largeur ;

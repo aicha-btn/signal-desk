@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { RadioTower } from "lucide-react";
 import { createSignal, type SignalFormState } from "@/app/(workspace)/signals/new/actions";
+import { PendingButtonContent } from "@/components/ui/pending-feedback";
 import type { Customer } from "@/lib/rails-api";
 
 const initialState: SignalFormState = { status: "idle", message: "" };
@@ -16,7 +17,7 @@ export function SignalForm({ workspaceId, customers }: { workspaceId: number; cu
   const [state, formAction, pending] = useActionState(createSignal, initialState);
 
   return (
-    <form action={formAction} className="grid gap-6" noValidate>
+    <form action={formAction} onReset={(event) => event.preventDefault()} className="grid gap-6" noValidate>
       <input type="hidden" name="workspaceId" value={workspaceId} />
       <div>
         <label className="app-form-label" htmlFor="title">Signal title</label>
@@ -50,8 +51,8 @@ export function SignalForm({ workspaceId, customers }: { workspaceId: number; cu
         </div>
       </div>
       {state.status === "error" && <p className="border-l-4 border-[var(--coral-500)] pl-3 text-sm" role="alert">{state.message}</p>}
-      <button className="button button-primary min-h-12 justify-self-start" type="submit" disabled={pending}>
-        <RadioTower aria-hidden="true" size={19} /> {pending ? "Capturing Signal…" : "Publish to Signal Feed"}
+      <button className="button button-primary min-h-12 justify-self-start" type="submit" disabled={pending} aria-busy={pending}>
+        <PendingButtonContent pending={pending} idleLabel="Publish to Signal Feed" pendingLabel="Capturing Signal..." idleIcon={<RadioTower aria-hidden="true" size={19} />} />
       </button>
     </form>
   );

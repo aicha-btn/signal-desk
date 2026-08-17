@@ -850,6 +850,18 @@ Representation sans photo pour client, membre ou workspace.
 - texte uniquement si l'attente depasse un delai perceptible ;
 - chargement de l'API Rails explique sans jargon technique.
 
+Contrat global :
+
+- toute navigation interne affiche immediatement un rail Signal de 4 px en haut du viewport ;
+- si la route attend des donnees, un squelette preserve la structure de la page ;
+- toute action locale affiche son pending dans la cible elle-meme ;
+- un bouton pending est disabled, expose `aria-busy` et conserve exactement ses dimensions ;
+- le Signal loader utilise trois barres fixes et remplace l'icone dans un cadre de 19 px ;
+- les verbes pending decrivent l'action : `Saving`, `Filtering`, `Deleting`, `Signing out` ;
+- les animations disparaissent avec `prefers-reduced-motion`, mais le rail, le squelette et le label restent visibles ;
+- le timeout visuel de securite d'une navigation est de 12 secondes ;
+- l'architecture et la checklist sont detaillees dans `docs/loading-and-action-feedback.md`.
+
 ### 20.2 Empty
 
 - titre clair ;
@@ -1426,6 +1438,15 @@ La validation se fera sur un premier Design Lab, puis sur trois ecrans pilotes :
 3. Signal Feed.
 
 ## 35. Journal des decisions
+
+### `0.2.0` - 17 aout 2026
+
+- adoption d'un contrat global de feedback pour chaque interaction asynchrone ;
+- rail Signal pour les navigations internes ;
+- Signal loader a trois barres pour les boutons pending ;
+- squelettes stables pour les routes du workspace ;
+- interdiction des actions sans feedback immediat ;
+- ajout du topic de contexte `feedback` et d'une checklist d'implementation dediee.
 
 ### `0.1.0`
 

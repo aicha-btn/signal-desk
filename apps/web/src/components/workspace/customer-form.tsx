@@ -3,19 +3,20 @@
 import { useActionState } from "react";
 import { Building2 } from "lucide-react";
 import { createCustomer, type CustomerFormState } from "@/app/(workspace)/customers/actions";
+import { PendingButtonContent } from "@/components/ui/pending-feedback";
 
 const initialState: CustomerFormState = { status: "idle", message: "" };
 
 export function CustomerForm({ workspaceId }: { workspaceId: number }) {
   const [state, formAction, pending] = useActionState(createCustomer, initialState);
   return (
-    <form action={formAction} className="grid gap-6" noValidate>
+    <form action={formAction} onReset={(event) => event.preventDefault()} className="grid gap-6" noValidate>
       <input type="hidden" name="workspaceId" value={workspaceId} />
       <Field label="Customer name" name="name" placeholder="Maya Chen" errors={state.fieldErrors?.name} />
       <Field label="Company" name="company" placeholder="Northstar" errors={state.fieldErrors?.company} />
       <Field label="Email (optional)" name="email" type="email" placeholder="maya@northstar.com" errors={state.fieldErrors?.email} />
       {state.status === "error" && <p className="border-l-4 border-[var(--coral-500)] pl-3 text-sm" role="alert">{state.message}</p>}
-      <button className="button button-primary min-h-12 justify-self-start" type="submit" disabled={pending}><Building2 aria-hidden="true" size={19} /> {pending ? "Creating customer…" : "Create customer"}</button>
+      <button className="button button-primary min-h-12 justify-self-start" type="submit" disabled={pending} aria-busy={pending}><PendingButtonContent pending={pending} idleLabel="Create customer" pendingLabel="Creating customer..." idleIcon={<Building2 aria-hidden="true" size={19} />} /></button>
     </form>
   );
 }

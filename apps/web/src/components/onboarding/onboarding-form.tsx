@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { ArrowRight } from "lucide-react";
+import { PendingButtonContent } from "@/components/ui/pending-feedback";
 import {
   createWorkspace,
   type OnboardingState,
@@ -21,7 +22,7 @@ export function OnboardingForm({ defaultName }: { defaultName: string }) {
   );
 
   return (
-    <form action={formAction} className="mt-10 max-w-[560px]" noValidate>
+    <form action={formAction} onReset={(event) => event.preventDefault()} className="mt-10 max-w-[560px]" noValidate>
       <div className="grid gap-6">
         <div>
           <label className="app-form-label" htmlFor="displayName">Your name</label>
@@ -42,9 +43,8 @@ export function OnboardingForm({ defaultName }: { defaultName: string }) {
         <p className="mt-5 border-l-4 border-[var(--coral-500)] pl-3 text-sm" role="alert">{state.message}</p>
       )}
 
-      <button className="button button-primary mt-8 min-h-12" type="submit" disabled={pending}>
-        {pending ? "Building the room…" : "Open the Control Room"}
-        {!pending && <ArrowRight aria-hidden="true" size={19} />}
+      <button className="button button-primary mt-8 min-h-12" type="submit" disabled={pending} aria-busy={pending}>
+        <PendingButtonContent pending={pending} idleLabel="Open the Control Room" pendingLabel="Building the room..." idleIcon={<ArrowRight aria-hidden="true" size={19} />} />
       </button>
     </form>
   );

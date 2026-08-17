@@ -25,6 +25,7 @@ topic_sections() {
     settings) echo "5 7 9 10.1 10.5 11.1 11.2 12 13 14 17 19.1 19.2 19.3 19.4 19.5 19.14 19.15 19.16 20 22.8 22.10 23 24 25 29" ;;
     components) echo "9 10 12 13 14 16 17 18 19 20 24 28 30 31 32" ;;
     motion) echo "3.2 5 15 16 17.2 20.1 20.4 24.4 27 31" ;;
+    feedback) echo "3.2 9.4 16.1 16.2 16.4 17 19.1 19.3 19.16 20 24.4 25 29 30" ;;
     charts) echo "5 9 10.1 10.5 11.1 11.2 12 16.1 16.2 16.4 17 19.7 19.8 19.9 20 21 23 24 29" ;;
     responsive) echo "10.1 10.4 10.5 11 12 13 17.2 19.1 19.2 19.9 19.10 19.11 19.14 23 24 29 30" ;;
     copy) echo "4 6 7 20.2 20.3 20.4 25 31" ;;
@@ -36,7 +37,7 @@ topic_sections() {
 
 usage() {
   echo "Usage: ./scripts/design-context.sh <topic> [topic ...]"
-  echo "Topics: core landing dashboard feed detail forms auth public-form settings components motion charts responsive copy assets review"
+  echo "Topics: core landing dashboard feed detail forms auth public-form settings components motion feedback charts responsive copy assets review"
 }
 
 extract_section() {

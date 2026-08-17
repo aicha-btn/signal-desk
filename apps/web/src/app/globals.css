@@ -132,6 +132,138 @@ a {
   transform: none;
 }
 
+.pending-button-content {
+  display: grid;
+  align-items: center;
+}
+
+.pending-button-state {
+  grid-area: 1 / 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  white-space: nowrap;
+}
+
+.pending-button-state[data-hidden="true"] {
+  visibility: hidden;
+}
+
+.signal-pending-mark {
+  display: inline-grid;
+  width: 19px;
+  height: 19px;
+  flex: 0 0 19px;
+  grid-template-columns: repeat(3, 3px);
+  align-items: end;
+  justify-content: center;
+  gap: 2px;
+}
+
+.signal-pending-mark span {
+  display: block;
+  width: 3px;
+  background: currentColor;
+  animation: signal-pending-pulse 720ms cubic-bezier(0.2, 0.8, 0.2, 1) infinite alternate;
+}
+
+.signal-pending-mark span:nth-child(1) {
+  height: 35%;
+}
+
+.signal-pending-mark span:nth-child(2) {
+  height: 62%;
+  animation-delay: 120ms;
+}
+
+.signal-pending-mark span:nth-child(3) {
+  height: 92%;
+  animation-delay: 240ms;
+}
+
+.route-feedback {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 4px;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.route-feedback[data-visible="true"] {
+  opacity: 1;
+}
+
+.route-feedback-signal {
+  display: grid;
+  width: 42%;
+  height: 100%;
+  grid-template-columns: 2fr 1fr 1fr;
+  animation: route-feedback-travel 900ms cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+}
+
+.route-feedback-signal span:nth-child(1) {
+  background: var(--cobalt-500);
+}
+
+.route-feedback-signal span:nth-child(2) {
+  background: var(--acid-400);
+}
+
+.route-feedback-signal span:nth-child(3) {
+  background: var(--magenta-500);
+}
+
+html[data-navigation-pending] a,
+html[data-navigation-pending] button {
+  cursor: progress;
+}
+
+.loading-surface {
+  border: 2px solid var(--ink-950);
+  background: var(--paper-0);
+}
+
+.loading-line {
+  max-width: 100%;
+  background: var(--line-200);
+  animation: loading-line-pulse 900ms ease-in-out infinite alternate;
+}
+
+@keyframes signal-pending-pulse {
+  from {
+    transform: scaleY(0.45);
+    transform-origin: bottom;
+  }
+  to {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+}
+
+@keyframes route-feedback-travel {
+  from {
+    transform: translateX(-105%);
+  }
+  to {
+    transform: translateX(245%);
+  }
+}
+
+@keyframes loading-line-pulse {
+  from {
+    opacity: 0.42;
+  }
+  to {
+    opacity: 0.9;
+  }
+}
+
 .button-dark {
   background: var(--ink-950);
   color: var(--paper-0);
@@ -454,5 +586,15 @@ a {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+  }
+
+  .route-feedback-signal {
+    width: 100%;
+    animation: none;
+  }
+
+  .signal-pending-mark span,
+  .loading-line {
+    animation: none;
   }
 }

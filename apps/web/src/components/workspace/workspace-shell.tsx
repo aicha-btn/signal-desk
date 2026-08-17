@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useFormStatus } from "react-dom";
 import {
   Activity,
   Building2,
@@ -14,6 +15,7 @@ import {
   Users,
 } from "lucide-react";
 import { signOut } from "@/app/(workspace)/actions";
+import { PendingMark } from "@/components/ui/pending-feedback";
 import type { Account, Workspace } from "@/lib/rails-api";
 
 const navigation = [
@@ -22,6 +24,23 @@ const navigation = [
   { label: "Customers", href: "/customers", icon: Building2 },
   { label: "Members", href: "/members", icon: Users },
 ] as const;
+
+function SignOutButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      className="flex size-10 items-center justify-center border-2 border-[var(--ink-950)] bg-[var(--paper-0)]"
+      type="submit"
+      aria-label={pending ? "Signing out" : "Sign out"}
+      aria-busy={pending}
+      title={pending ? "Signing out" : "Sign out"}
+      disabled={pending}
+    >
+      {pending ? <PendingMark /> : <LogOut aria-hidden="true" size={17} />}
+    </button>
+  );
+}
 
 function isCurrentPath(pathname: string, href: string) {
   if (href === "/signal-feed" && pathname.startsWith("/signals/")) return true;
@@ -109,9 +128,7 @@ export function WorkspaceShell({
                 {initials}
               </span>
               <form action={signOut}>
-                <button className="flex size-10 items-center justify-center border-2 border-[var(--ink-950)] bg-[var(--paper-0)]" type="submit" aria-label="Sign out" title="Sign out">
-                  <LogOut aria-hidden="true" size={17} />
-                </button>
+                <SignOutButton />
               </form>
             </div>
           </header>

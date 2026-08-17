@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { ArrowRight, Check } from "lucide-react";
+import { PendingButtonContent } from "@/components/ui/pending-feedback";
 import {
   joinEarlyAccess,
   type LeadFormState,
@@ -35,7 +36,7 @@ export function LeadForm() {
   }
 
   return (
-    <form action={formAction} className="border-t-2 border-[var(--paper-0)] pt-6" noValidate>
+    <form action={formAction} onReset={(event) => event.preventDefault()} className="border-t-2 border-[var(--paper-0)] pt-6" noValidate>
       <p className="mb-6 text-lg leading-7">
         Join the founding list. No payment, no commitment, no automated sales sequence.
       </p>
@@ -112,9 +113,8 @@ export function LeadForm() {
         <p className="mt-5 border-l-4 border-[var(--acid-400)] pl-3 text-sm" role="alert">{state.message}</p>
       )}
 
-      <button className="button mt-6 min-h-12 w-full bg-[var(--acid-400)] text-[var(--ink-950)] hover:bg-[var(--paper-0)]" type="submit" disabled={pending}>
-        {pending ? "Sending signal…" : "Join early access"}
-        {!pending && <ArrowRight aria-hidden="true" size={19} strokeWidth={2.4} />}
+      <button className="button mt-6 min-h-12 w-full bg-[var(--acid-400)] text-[var(--ink-950)] hover:bg-[var(--paper-0)]" type="submit" disabled={pending} aria-busy={pending}>
+        <PendingButtonContent pending={pending} idleLabel="Join early access" pendingLabel="Sending signal..." idleIcon={<ArrowRight aria-hidden="true" size={19} strokeWidth={2.4} />} />
       </button>
       <p className="mt-3 font-mono text-[10px] leading-4 text-[var(--paper-0)]">
         FOUNDING ACCESS · UNSUBSCRIBE ANYTIME

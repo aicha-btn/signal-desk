@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Archivo, IBM_Plex_Mono, Instrument_Sans } from "next/font/google";
+import { NavigationFeedback } from "@/components/ui/navigation-feedback";
 import "./globals.css";
 
 const archivo = Archivo({
@@ -58,7 +60,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${archivo.variable} ${instrumentSans.variable} ${ibmPlexMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <Suspense fallback={null}>
+          <NavigationFeedback />
+        </Suspense>
+        {children}
+      </body>
     </html>
   );
 }

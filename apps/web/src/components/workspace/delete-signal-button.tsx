@@ -3,12 +3,13 @@
 import { useFormStatus } from "react-dom";
 import { Trash2 } from "lucide-react";
 import { deleteSignal } from "@/app/(workspace)/signals/actions";
+import { PendingButtonContent } from "@/components/ui/pending-feedback";
 
 function DeleteButton() {
   const { pending } = useFormStatus();
   return (
-    <button className="button bg-[var(--paper-0)] text-[var(--coral-500)] hover:bg-[var(--coral-500)] hover:text-[var(--paper-0)]" type="submit" disabled={pending}>
-      <Trash2 aria-hidden="true" size={18} /> {pending ? "Deleting..." : "Delete Signal"}
+    <button className="button bg-[var(--paper-0)] text-[var(--coral-500)] hover:bg-[var(--coral-500)] hover:text-[var(--paper-0)]" type="submit" disabled={pending} aria-busy={pending}>
+      <PendingButtonContent pending={pending} idleLabel="Delete Signal" pendingLabel="Deleting Signal..." idleIcon={<Trash2 aria-hidden="true" size={18} />} />
     </button>
   );
 }

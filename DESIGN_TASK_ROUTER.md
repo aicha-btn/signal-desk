@@ -25,6 +25,7 @@ Commande :
 | `settings` | Membres, permissions, securite, legal | Controles sobres + patterns confiance et legal |
 | `components` | Primitive ou composant metier | 9, 10, 12, 13, 14, 16, 17, 18, 19, 20, 24, 28, 30, 31, 32 |
 | `motion` | GSAP, transitions, animations | Principe calme/expressif + assets + motion + reduced-motion |
+| `feedback` | Loading, pending, server actions, transitions de route | Interaction + boutons + etats systeme + accessibilite |
 | `charts` | Data visualisation, Signal Pulse | Fondations + composants data + visualisations + accessibilite |
 | `responsive` | Mobile, tablet, layout, overflow | Grille + composants + patterns + responsive + checklists |
 | `copy` | Labels, erreurs, emails, statuts | Personnalite + vocabulaire + etats + voix |
@@ -39,6 +40,7 @@ Commande :
 - Une page avec graphiques charge aussi `charts`.
 - Une modification de texte visible charge `copy`.
 - Une modification globale charge `core` et `review`.
+- Une modification de loading, pending ou navigation asynchrone charge `feedback`.
 - Une tache Rails sans effet UI ne charge aucun topic, sauf `copy` si ses sorties sont affichees.
 
 ## Exemples
@@ -47,6 +49,7 @@ Commande :
 ./scripts/design-context.sh landing
 ./scripts/design-context.sh feed components responsive
 ./scripts/design-context.sh dashboard charts motion responsive
+./scripts/design-context.sh feedback
 ./scripts/design-context.sh copy
 ./scripts/design-context.sh review
 ```

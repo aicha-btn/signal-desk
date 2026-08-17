@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useActionState } from "react";
 import { ArrowRight, Check, LockKeyhole } from "lucide-react";
+import { PendingButtonContent } from "@/components/ui/pending-feedback";
 import {
   signIn,
   signUp,
@@ -35,7 +36,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
   }
 
   return (
-    <form action={formAction} noValidate>
+    <form action={formAction} onReset={(event) => event.preventDefault()} noValidate>
       <div className="mb-8 flex border-2 border-[var(--ink-950)]" aria-label="Authentication mode">
         <Link
           href="/login"
@@ -85,9 +86,13 @@ export function AuthForm({ mode }: { mode: Mode }) {
         <p className="mt-5 border-l-4 border-[var(--coral-500)] pl-3 text-sm leading-5" role="alert">{state.message}</p>
       )}
 
-      <button className="button button-primary mt-7 w-full" type="submit" disabled={pending}>
-        {pending ? "Opening the line…" : mode === "login" ? "Enter the Control Room" : "Create my workspace"}
-        {!pending && <ArrowRight aria-hidden="true" size={19} />}
+      <button className="button button-primary mt-7 w-full" type="submit" disabled={pending} aria-busy={pending}>
+        <PendingButtonContent
+          pending={pending}
+          idleLabel={mode === "login" ? "Enter the Control Room" : "Create my workspace"}
+          pendingLabel={mode === "login" ? "Opening the line..." : "Creating workspace..."}
+          idleIcon={<ArrowRight aria-hidden="true" size={19} />}
+        />
       </button>
 
       <p className="mt-4 flex items-center justify-center gap-2 text-center text-xs text-[var(--ink-600)]">

@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { Save } from "lucide-react";
 import { updateSignal, type SignalDetailFormState } from "@/app/(workspace)/signals/actions";
+import { PendingButtonContent } from "@/components/ui/pending-feedback";
 import type { Customer, Feedback } from "@/lib/rails-api";
 
 const initialState: SignalDetailFormState = { status: "idle", message: "" };
@@ -24,7 +25,7 @@ export function SignalDetailForm({
   const [state, formAction, pending] = useActionState(updateSignal, initialState);
 
   return (
-    <form action={formAction} className="grid gap-7" noValidate>
+    <form action={formAction} onReset={(event) => event.preventDefault()} className="grid gap-7" noValidate>
       <input type="hidden" name="workspaceId" value={workspaceId} />
       <input type="hidden" name="feedbackId" value={feedback.id} />
 
@@ -70,8 +71,8 @@ export function SignalDetailForm({
 
       {state.message && <p className="border-l-4 border-[var(--coral-500)] pl-3 text-sm" role="alert">{state.message}</p>}
 
-      <button className="button button-primary min-h-12 justify-self-start" type="submit" disabled={pending}>
-        <Save aria-hidden="true" size={19} /> {pending ? "Saving Signal..." : "Save changes"}
+      <button className="button button-primary min-h-12 justify-self-start" type="submit" disabled={pending} aria-busy={pending}>
+        <PendingButtonContent pending={pending} idleLabel="Save changes" pendingLabel="Saving Signal..." idleIcon={<Save aria-hidden="true" size={19} />} />
       </button>
     </form>
   );
