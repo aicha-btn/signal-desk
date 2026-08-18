@@ -38,6 +38,16 @@ pnpm dev
 - API health: http://localhost:3001/up
 - Versioned API health: http://localhost:3001/api/v1/health
 
+Create a complete presentation workspace with a confirmed local account:
+
+```bash
+pnpm demo:seed
+```
+
+The command is idempotent and local-only. It prints the demo credentials and
+public Signal form URL when it finishes. See `docs/demo-data.md` for the dataset
+and safety guarantees.
+
 ## Verification
 
 ```bash

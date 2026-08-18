@@ -749,7 +749,7 @@ Services explicitement retires :
 
 ## Roadmap verticale
 
-### Etat d'avancement au 17 aout 2026
+### Etat d'avancement au 18 aout 2026
 
 | Phase | Etat | Livre | Reste principal |
 | --- | --- | --- | --- |
@@ -761,9 +761,9 @@ Services explicitement retires :
 | 6. Collaboration et dashboard | Termine | Control Room, statistiques reelles, commentaires, ActivityEvents, services transactionnels et etats complets | Maintenance uniquement |
 | 7. Membres et emails | Termine cote code | Invitations temporaires, acceptation securisee, Action Mailer, Resend et tests owner/admin/member | Ajouter la cle et l'expediteur verifies sur Render |
 | 8. Formulaire public | Termine | Page publique, configuration workspace, endpoint anonyme, anti-abus et tests de securite | Maintenance uniquement |
-| 9. Finition portfolio | En cours | Landing, design system, CI, E2E coeur, audit Axe et regressions accessibilite | VoiceOver, donnees demo, README final et captures |
+| 9. Finition portfolio | En cours | Landing, design system, CI, E2E coeur, audit Axe, regressions accessibilite et donnees demo | VoiceOver, README final et captures |
 
-Prochaine priorite : automatiser le parcours principal de bout en bout et auditer l'accessibilite.
+Prochaine priorite : finaliser le README portfolio, le diagramme d'architecture et les captures de demonstration.
 
 ### Phase 1 - Cadrage et architecture
 
@@ -864,7 +864,7 @@ Objectif : pouvoir creer et consulter un feedback de bout en bout.
 - [x] regressions clavier des skip links et selects personnalises ;
 - [x] reflow 390, 720, 768, 1440 et 1728 px et reduced-motion ;
 - [ ] parcours clavier exhaustif, zoom navigateur 200 % et VoiceOver ;
-- [ ] donnees de demonstration ;
+- [x] donnees de demonstration ;
 - [ ] README final ;
 - [ ] diagramme d'architecture ;
 - [ ] captures d'ecran ;
