@@ -16,7 +16,7 @@ Rails.application.routes.draw do
           resources :comments, only: %i[index create destroy]
           resources :activity_events, only: :index
         end
-        resources :customers, only: %i[index create]
+        resources :customers, only: %i[index create show update destroy]
         resources :members, only: :index
         resources :invitations, only: %i[index create destroy]
         resources :tags, only: %i[index create update destroy]

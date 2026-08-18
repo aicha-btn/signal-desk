@@ -234,6 +234,12 @@ export function getCustomers(workspaceId: number) {
   );
 }
 
+export function getCustomer(workspaceId: number, customerId: number) {
+  return railsRequest<{ customer: Customer }>(
+    `/api/v1/workspaces/${workspaceId}/customers/${customerId}`,
+  );
+}
+
 export function getMembers(workspaceId: number) {
   return railsRequest<{ members: Member[] }>(
     `/api/v1/workspaces/${workspaceId}/members`,

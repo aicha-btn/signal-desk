@@ -461,6 +461,7 @@ La liste accepte :
 - `POST /api/v1/workspaces/:workspace_id/customers`
 - `GET /api/v1/workspaces/:workspace_id/customers/:id`
 - `PATCH /api/v1/workspaces/:workspace_id/customers/:id`
+- `DELETE /api/v1/workspaces/:workspace_id/customers/:id`
 
 ### Tags
 

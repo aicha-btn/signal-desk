@@ -42,6 +42,29 @@ test("an operator creates a workspace and publishes its first Signal", async ({ 
   await expectAccessible(page, "members");
   await page.goto("/settings");
   await expectAccessible(page, "settings");
+
+  await page.goto("/customers");
+  await expectAccessible(page, "customers");
+  await page.getByRole("link", { name: "Add customer" }).click();
+  await page.getByLabel("Customer name").fill("Portfolio Contact");
+  await page.getByLabel("Company").fill("Northstar Demo");
+  await page.getByLabel("Email (optional)").fill("portfolio-contact@example.test");
+  await page.getByRole("button", { name: "Create customer" }).click();
+  await page.waitForURL("**/customers?created=1");
+  await expect(page.getByText("Portfolio Contact", { exact: true })).toBeVisible();
+
+  await page.getByRole("link", { name: "Edit Portfolio Contact" }).click();
+  await expectAccessible(page, "edit customer");
+  await page.getByLabel("Customer name").fill("Portfolio Contact Updated");
+  await page.getByRole("button", { name: "Save customer" }).click();
+  await page.waitForURL("**/customers?updated=1");
+  await expect(page.getByText("Portfolio Contact Updated", { exact: true })).toBeVisible();
+
+  page.once("dialog", (dialog) => dialog.accept());
+  await page.getByRole("button", { name: "Delete Portfolio Contact Updated" }).click();
+  await page.waitForURL("**/customers?deleted=1");
+  await expect(page.getByText("Portfolio Contact Updated", { exact: true })).toHaveCount(0);
+  await expect(page.getByRole("status")).toContainText("Attached Signals were kept");
 });
 
 async function expectAccessible(page: Page, context: string) {
