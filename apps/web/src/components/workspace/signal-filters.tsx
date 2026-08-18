@@ -35,7 +35,7 @@ export function SignalFilters({ filters, tags }: { filters: SignalFilterValues; 
     <>
       <Form
         action="/signal-feed"
-        className="grid gap-3 border-2 border-[var(--ink-950)] bg-[var(--paper-0)] p-4 md:grid-cols-2 xl:grid-cols-[minmax(240px,1fr)_145px_145px_165px_180px_120px_auto]"
+        className="grid gap-3 border-2 border-[var(--ink-950)] bg-[var(--paper-0)] p-4 md:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-[minmax(240px,1fr)_145px_145px_165px_180px_120px_auto]"
         onSubmit={(event) => {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);

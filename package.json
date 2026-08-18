@@ -18,6 +18,7 @@
     "supabase:start": "supabase start",
     "supabase:stop": "supabase stop",
     "demo:seed": "mise exec -- node scripts/seed-demo.mjs",
+    "portfolio:capture": "mise exec -- node scripts/capture-portfolio.mjs",
     "check": "pnpm lint:web && pnpm build:web && pnpm lint:api && pnpm test:api",
     "check:release": "pnpm check && pnpm test:e2e"
   },

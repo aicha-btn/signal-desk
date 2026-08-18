@@ -761,7 +761,7 @@ Services explicitement retires :
 | 6. Collaboration et dashboard | Termine | Control Room, statistiques reelles, commentaires, ActivityEvents, services transactionnels et etats complets | Maintenance uniquement |
 | 7. Membres et emails | Termine cote code | Invitations temporaires, acceptation securisee, Action Mailer, Resend et tests owner/admin/member | Ajouter la cle et l'expediteur verifies sur Render |
 | 8. Formulaire public | Termine | Page publique, configuration workspace, endpoint anonyme, anti-abus et tests de securite | Maintenance uniquement |
-| 9. Finition portfolio | En cours | Landing, design system, CI, E2E coeur, audit Axe, regressions accessibilite et donnees demo | VoiceOver, README final et captures |
+| 9. Finition portfolio | En cours | Landing, design system, CI, E2E coeur, audit Axe, regressions accessibilite, donnees demo, README et architecture | VoiceOver, captures et verification finale |
 
 Prochaine priorite : finaliser le README portfolio, le diagramme d'architecture et les captures de demonstration.
 
@@ -865,12 +865,12 @@ Objectif : pouvoir creer et consulter un feedback de bout en bout.
 - [x] reflow 390, 720, 768, 1440 et 1728 px et reduced-motion ;
 - [ ] parcours clavier exhaustif, zoom navigateur 200 % et VoiceOver ;
 - [x] donnees de demonstration ;
-- [ ] README final ;
-- [ ] diagramme d'architecture ;
-- [ ] captures d'ecran ;
+- [x] README final ;
+- [x] diagramme d'architecture ;
+- [x] captures d'ecran ;
 - [ ] deploiement final ;
 - [ ] verification des liens ;
-- [ ] explication des compromis techniques.
+- [x] explication des compromis techniques.
 
 ## Definition de fini
 
