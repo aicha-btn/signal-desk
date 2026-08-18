@@ -31,3 +31,4 @@ supabase/.temp/
 .vercel/
 test-results/
 playwright-report/
+.signaldesk-production-demo-accounts.md

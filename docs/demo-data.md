@@ -4,6 +4,9 @@ SignalDesk includes a local-only demo workspace for portfolio reviews and manual
 product testing. It contains realistic customers, team roles, tags, Signals,
 comments and activity history across every status, priority and source.
 
+The deterministic dataset currently contains 18 Signals, 10 customers, seven
+tags, eight members and 13 discussion comments.
+
 ## Create or reset the demo
 
 Start the local Supabase stack and prepare Rails once:
@@ -40,5 +43,11 @@ The script refuses every Supabase URL whose hostname is not `localhost`,
 local service-role key. Re-running the command rebuilds only the dedicated demo
 workspace, so screenshots and walkthroughs always start from the same state.
 
-Production demo content must be created through a separate, explicit release
-procedure. This local command cannot seed production by design.
+Production demo content uses the separate `pnpm demo:seed:production` command.
+It requires `--confirm-production`, validates the fixed project and owner, and
+writes generated secondary-account credentials to an ignored local file with
+owner-only permissions. The local command cannot seed production by design.
+
+The production command also requires `SUPABASE_DB_PASSWORD` in the invoking
+shell and an authenticated Supabase CLI session. It never writes either the
+database password or Supabase administrative keys to disk.

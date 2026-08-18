@@ -22,6 +22,34 @@ class DemoWorkspaceSeeder
       email: "amir.haddad@signaldesk.test",
       display_name: "Amir Haddad",
       role: :member
+    },
+    {
+      key: :ines,
+      supabase_user_id: "00000000-0000-4000-8000-000000000104",
+      email: "ines.martin@signaldesk.test",
+      display_name: "Ines Martin",
+      role: :admin
+    },
+    {
+      key: :lucas,
+      supabase_user_id: "00000000-0000-4000-8000-000000000105",
+      email: "lucas.meyer@signaldesk.test",
+      display_name: "Lucas Meyer",
+      role: :member
+    },
+    {
+      key: :sara,
+      supabase_user_id: "00000000-0000-4000-8000-000000000106",
+      email: "sara.kovac@signaldesk.test",
+      display_name: "Sara Kovac",
+      role: :member
+    },
+    {
+      key: :theo,
+      supabase_user_id: "00000000-0000-4000-8000-000000000107",
+      email: "theo.bernard@signaldesk.test",
+      display_name: "Theo Bernard",
+      role: :member
     }
   ].freeze
 
@@ -30,7 +58,12 @@ class DemoWorkspaceSeeder
     kanso: { name: "Tom Becker", company: "Kanso Labs", email: "tom@kanso.example" },
     arcwell: { name: "Leila Rahman", company: "Arcwell", email: "leila@arcwell.example" },
     looma: { name: "Jon Bell", company: "Looma", email: "jon@looma.example" },
-    verdant: { name: "Camille Roy", company: "Verdant Cloud", email: "camille@verdant.example" }
+    verdant: { name: "Camille Roy", company: "Verdant Cloud", email: "camille@verdant.example" },
+    ember: { name: "Ravi Shah", company: "Ember Finance", email: "ravi@ember.example" },
+    orbit: { name: "Ana Costa", company: "Orbit Health", email: "ana@orbit.example" },
+    kivu: { name: "Josephine Diallo", company: "Kivu Mobility", email: "josephine@kivu.example" },
+    atelier: { name: "Louise Perrin", company: "Atelier No. 8", email: "louise@atelier8.example" },
+    meridian: { name: "Owen Clarke", company: "Meridian Legal", email: "owen@meridian.example" }
   }.freeze
 
   TAGS = %w[Reporting Permissions Integrations Mobile Security Workflow Billing].freeze
@@ -129,30 +162,75 @@ class DemoWorkspaceSeeder
       description: "Workspace owners want to see who invited, revoked or re-sent each pending membership invitation.",
       status: "new", priority: "medium", source: "other", customer: :verdant,
       creator: :owner, tags: %w[Permissions Security], days_ago: 1
+    },
+    {
+      title: "Invoice PDFs ignore the billing entity",
+      description: "Invoices generated for multi-entity accounts keep the workspace address instead of the selected legal entity.",
+      status: "reviewing", priority: "medium", source: "email", customer: :ember,
+      creator: :ines, tags: %w[Billing Reporting], days_ago: 24,
+      comments: [
+        { author: :sara, days_after: 2, body: "Ember shared three examples. Tax values are correct; only the entity identity is stale." }
+      ]
+    },
+    {
+      title: "Keyboard shortcut conflicts with browser search",
+      description: "The global search shortcut captures focus while a user is searching within long Signal discussions.",
+      status: "new", priority: "low", source: "internal", customer: nil,
+      creator: :lucas, tags: %w[Workflow], days_ago: 20
+    },
+    {
+      title: "Webhook retries arrive out of order",
+      description: "Delayed retries can overwrite a newer customer status when providers recover after an outage.",
+      status: "planned", priority: "high", source: "support", customer: :orbit,
+      creator: :nora, tags: %w[Integrations Workflow], days_ago: 16,
+      comments: [
+        { author: :theo, days_after: 1, body: "Provider timestamps are available on every event. We should reject stale transitions before persistence." }
+      ]
+    },
+    {
+      title: "Usage dashboard shifts dates across time zones",
+      description: "Monthly usage charts move the final day into the next period for teams operating west of UTC.",
+      status: "resolved", priority: "medium", source: "email", customer: :kivu,
+      creator: :sara, tags: %w[Reporting], days_ago: 12,
+      comments: [
+        { author: :ines, days_after: 3, body: "Released with workspace-local boundaries. Kivu validated both Dakar and Montreal reporting." }
+      ]
+    },
+    {
+      title: "French labels truncate the mobile review flow",
+      description: "Long translated actions push the approval count outside its fixed toolbar on compact screens.",
+      status: "reviewing", priority: "medium", source: "public_form", customer: :atelier,
+      creator: nil, tags: %w[Mobile Workflow], days_ago: 8,
+      comments: [
+        { author: :lucas, days_after: 1, body: "The responsive control can wrap once without moving the decision actions below the fold." }
+      ]
+    },
+    {
+      title: "Data retention exports omit deletion evidence",
+      description: "Compliance exports list retained records but do not include the audit evidence for completed deletion requests.",
+      status: "planned", priority: "critical", source: "call", customer: :meridian,
+      creator: :owner, tags: %w[Security Reporting], days_ago: 4,
+      comments: [
+        { author: :amir, days_after: 1, body: "We can expose immutable deletion events without restoring or identifying the deleted payload." }
+      ]
     }
   ].freeze
 
-  def self.call(owner_attributes:)
-    new(owner_attributes:).call
+  def self.call(owner_attributes:, team_attributes: {}, workspace: nil, workspace_name: nil)
+    new(owner_attributes:, team_attributes:, workspace:, workspace_name:).call
   end
 
-  def initialize(owner_attributes:)
+  def initialize(owner_attributes:, team_attributes:, workspace:, workspace_name:)
     @owner_attributes = owner_attributes.symbolize_keys
+    @team_attributes = team_attributes.deep_symbolize_keys
+    @target_workspace = workspace
+    @workspace_name = workspace_name
   end
 
   def call
     ApplicationRecord.transaction do
       owner = upsert_user(owner_attributes)
-      Workspace.find_by(slug: WORKSPACE_SLUG)&.destroy!
-
-      workspace = Workspace.create!(
-        name: "Northstar Product Studio",
-        slug: WORKSPACE_SLUG,
-        public_form_enabled: true,
-        public_form_token: SecureRandom.urlsafe_base64(18),
-        created_at: 90.days.ago,
-        updated_at: 2.hours.ago
-      )
+      workspace = prepare_workspace(owner)
 
       people = create_team(workspace, owner)
       customers = create_customers(workspace)
@@ -178,14 +256,48 @@ class DemoWorkspaceSeeder
 
   private
 
-  attr_reader :owner_attributes
+  attr_reader :owner_attributes, :team_attributes, :target_workspace, :workspace_name
+
+  def prepare_workspace(owner)
+    return create_demo_workspace unless target_workspace
+
+    membership = target_workspace.memberships.find_by(user: owner)
+    raise ArgumentError, "The demo owner must own the target workspace" unless membership&.owner?
+
+    target_workspace.feedbacks.destroy_all
+    target_workspace.comments.destroy_all
+    target_workspace.activity_events.destroy_all
+    target_workspace.customers.destroy_all
+    target_workspace.tags.destroy_all
+    target_workspace.workspace_invitations.destroy_all
+    target_workspace.memberships.destroy_all
+    target_workspace.update!(
+      name: workspace_name.presence || target_workspace.name,
+      public_form_enabled: true
+    )
+    target_workspace
+  end
+
+  def create_demo_workspace
+    Workspace.find_by(slug: WORKSPACE_SLUG)&.destroy!
+    Workspace.create!(
+      name: workspace_name.presence || "Northstar Product Studio",
+      slug: WORKSPACE_SLUG,
+      public_form_enabled: true,
+      public_form_token: SecureRandom.urlsafe_base64(18),
+      created_at: 90.days.ago,
+      updated_at: 2.hours.ago
+    )
+  end
 
   def create_team(workspace, owner)
     people = { owner: }
     Membership.create!(workspace:, user: owner, role: :owner)
 
     TEAM.each do |definition|
-      user = upsert_user(definition.slice(:supabase_user_id, :email, :display_name))
+      identity = definition.slice(:supabase_user_id, :email, :display_name)
+        .merge(team_attributes.fetch(definition.fetch(:key), {}))
+      user = upsert_user(identity)
       Membership.create!(workspace:, user:, role: definition.fetch(:role))
       people[definition.fetch(:key)] = user
     end

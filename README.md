@@ -148,8 +148,8 @@ pnpm demo:seed
 
 The command prints the login credentials and public form URL. It is idempotent,
 refuses non-local Supabase hosts and rebuilds only its dedicated workspace. The
-dataset includes 12 realistic Signals, all statuses, priorities and sources,
-plus customers, tags, four team members, comments and activity history.
+dataset includes 18 realistic Signals, all statuses, priorities and sources,
+plus 10 customers, seven tags, eight team members, comments and activity history.
 
 See [`docs/demo-data.md`](docs/demo-data.md) for the data contract and safety
 guarantees.
