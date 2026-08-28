@@ -1,112 +1,115 @@
 # SignalDesk
 
-SignalDesk is a customer-feedback intelligence workspace built for product,
-support and leadership teams. It turns scattered input into one shared Signal
-Feed where teams can qualify evidence, set priorities, discuss decisions and
-close the loop.
+SignalDesk est un espace d'intelligence dédié aux retours clients, conçu pour
+les équipes produit, support et direction. Il transforme des retours dispersés
+en un Signal Feed partagé, dans lequel les équipes peuvent qualifier les
+informations, définir les priorités, discuter des décisions et boucler la boucle.
 
-[Open the live product](https://signal-desk-lake.vercel.app) | [Read the architecture](docs/architecture.md) | [Review the tradeoffs](docs/technical-tradeoffs.md)
+[Ouvrir le produit en ligne](https://signal-desk-lake.vercel.app) | [Lire l'architecture](docs/architecture.md) | [Consulter les compromis techniques](docs/technical-tradeoffs.md)
 
-![SignalDesk landing page](docs/screenshots/landing.png)
+![Page d'accueil de SignalDesk](docs/screenshots/landing.png)
 
-## Product scope
+## Périmètre fonctionnel
 
-- A public conversion landing page with an authenticated header state.
-- Supabase email/password authentication and secure SSR sessions.
-- Workspace onboarding with owner, admin and member permissions.
-- A Control Room based on real workspace data.
-- Full Signal lifecycle: create, inspect, edit, prioritize and resolve.
-- Search, filters, sorting, tags, customers and URL-shareable feed state.
-- Comments and an immutable activity timeline for collaboration.
-- Resend-backed workspace invitations with expiry and revocation.
-- A configurable public Signal form with CORS, honeypot and rate limits.
-- Branded loading, pending, success, error and empty states across the product.
-- Keyboard, reduced-motion, responsive reflow and automated Axe coverage.
+- Une landing page publique orientée conversion, avec un header adapté à l'état d'authentification.
+- Une authentification Supabase par email et mot de passe, avec des sessions SSR sécurisées.
+- Un parcours de création d'espace de travail avec les rôles propriétaire, administrateur et membre.
+- Une Control Room alimentée par les données réelles de l'espace de travail.
+- Un cycle de vie complet des Signals : création, consultation, modification, priorisation et résolution.
+- Une recherche, des filtres, un tri, des tags, des clients et un état du feed partageable par URL.
+- Des commentaires et une chronologie d'activité immuable pour faciliter la collaboration.
+- Des invitations aux espaces de travail envoyées avec Resend, révocables et limitées dans le temps.
+- Un formulaire public configurable avec CORS, honeypot et limitation du nombre de requêtes.
+- Des états de chargement, d'attente, de réussite, d'erreur et de liste vide cohérents avec la marque.
+- Une navigation au clavier, une gestion de la réduction des animations, un affichage responsive et une couverture Axe automatisée.
 
 ## Architecture
 
-SignalDesk is a monorepo with two independently deployed applications. Next.js
-owns rendering and interaction; Rails owns business data, authorization and
-domain rules. Supabase provides authentication and the PostgreSQL infrastructure,
-but the browser never queries business tables directly.
+SignalDesk est un monorepo composé de deux applications déployées indépendamment.
+Next.js gère le rendu et les interactions ; Rails gère les données métier,
+l'autorisation et les règles du domaine. Supabase fournit l'authentification et
+l'infrastructure PostgreSQL, mais le navigateur n'interroge jamais directement
+les tables métier.
 
 ```mermaid
 flowchart LR
-  Browser["Browser"] --> Next["Next.js 16 / Vercel"]
+  Browser["Navigateur"] --> Next["Next.js 16 / Vercel"]
   Next --> Auth["Supabase Auth"]
-  Next -->|"Bearer access token"| Rails["Rails 8 API / Render"]
-  Rails -->|"JWKS verification"| Auth
-  Rails --> Policy["Pundit + workspace boundary"]
+  Next -->|"Jeton d'accès Bearer"| Rails["API Rails 8 / Render"]
+  Rails -->|"Vérification JWKS"| Auth
+  Rails --> Policy["Pundit + isolation des espaces"]
   Policy --> DB["Supabase PostgreSQL"]
   Rails --> Email["Resend"]
 ```
 
-The complete request flow, trust boundaries and deployment topology are in
+Le flux complet des requêtes, les frontières de confiance et la topologie de
+déploiement sont détaillés dans
 [`docs/architecture.md`](docs/architecture.md).
 
-## Product tour
+## Visite du produit
 
 ### Control Room
 
-The workspace pulse combines active volume, priority pressure and closed loops
-with the latest Signals in one operational view.
+La vue d'ensemble de l'espace réunit le volume actif, la pression des priorités,
+les boucles clôturées et les derniers Signals dans une seule vue opérationnelle.
 
-![SignalDesk Control Room](docs/screenshots/control-room.png)
+![Control Room de SignalDesk](docs/screenshots/control-room.png)
 
 ### Signal Feed
 
-Teams can search, filter, sort and share feed state without losing the context
-carried by customers, tags, source, status and priority.
+Les équipes peuvent rechercher, filtrer, trier et partager l'état du feed sans
+perdre le contexte apporté par les clients, les tags, la source, le statut et la
+priorité.
 
-![SignalDesk Signal Feed](docs/screenshots/signal-feed.png)
+![Signal Feed de SignalDesk](docs/screenshots/signal-feed.png)
 
-### Signal detail
+### Détail d'un Signal
 
-The detail view keeps qualification, discussion and audit history together so a
-decision remains understandable after the meeting ends.
+La vue détaillée rassemble la qualification, les échanges et l'historique
+d'audit afin qu'une décision reste compréhensible une fois la réunion terminée.
 
-![SignalDesk Signal detail](docs/screenshots/signal-detail.png)
+![Détail d'un Signal dans SignalDesk](docs/screenshots/signal-detail.png)
 
-### Public capture
+### Collecte publique
 
-Each workspace can publish a focused intake form that creates a Signal without
-exposing the authenticated product or tenant data.
+Chaque espace de travail peut publier un formulaire ciblé qui crée un Signal
+sans exposer le produit authentifié ni les données des autres espaces.
 
-![SignalDesk public Signal form](docs/screenshots/public-form.png)
+![Formulaire public de SignalDesk](docs/screenshots/public-form.png)
 
-## Technology
+## Technologies
 
-| Layer | Technology | Responsibility |
+| Couche | Technologie | Responsabilité |
 | --- | --- | --- |
-| Web | Next.js 16, React 19, TypeScript, Tailwind CSS 4 | SSR, navigation, forms and interaction feedback |
-| Motion | GSAP | Restrained landing-page motion with reduced-motion support |
-| API | Rails 8.1, Ruby 3.4, Puma | Domain logic, validation, serialization and API endpoints |
-| Data | PostgreSQL on Supabase | Relational business data and database constraints |
-| Identity | Supabase Auth | Credentials, sessions, ES256 access tokens and JWKS |
-| Authorization | Pundit | Role and workspace-level access control |
-| Email | Action Mailer and Resend | Workspace invitation delivery |
-| Quality | RSpec, Playwright, Axe, RuboCop, Brakeman, ESLint | Behavior, accessibility, style and security checks |
-| Delivery | GitHub Actions, Vercel, Render | CI and independent frontend/API deployment |
+| Web | Next.js 16, React 19, TypeScript, Tailwind CSS 4 | SSR, navigation, formulaires et retours d'interaction |
+| Animations | GSAP | Animations maîtrisées sur la landing page avec prise en charge de la réduction des mouvements |
+| API | Rails 8.1, Ruby 3.4, Puma | Logique métier, validation, sérialisation et endpoints API |
+| Données | PostgreSQL sur Supabase | Données métier relationnelles et contraintes de base de données |
+| Identité | Supabase Auth | Identifiants, sessions, jetons d'accès ES256 et JWKS |
+| Autorisation | Pundit | Contrôle des accès par rôle et par espace de travail |
+| Email | Action Mailer et Resend | Envoi des invitations aux espaces de travail |
+| Qualité | RSpec, Playwright, Axe, RuboCop, Brakeman, ESLint | Comportement, accessibilité, style et contrôles de sécurité |
+| Déploiement | GitHub Actions, Vercel, Render | CI et déploiement indépendant du frontend et de l'API |
 
-## Repository
+## Structure du dépôt
 
 ```text
 apps/
-  api/                 Rails JSON API
-  web/                 Next.js App Router application
-docs/                  Focused engineering documentation
-scripts/               Local orchestration utilities
-supabase/              Local Supabase configuration
-tests/e2e/             Browser journeys and accessibility regressions
-PLAN_SIGNALDESK.md     Product roadmap and completion state
-DESIGN_SYSTEM.md       Full visual and interaction specification
-DESIGN_CONTEXT.md      Compact design context for implementation work
+  api/                 API JSON Rails
+  web/                 Application Next.js avec App Router
+docs/                  Documentation technique ciblée
+scripts/               Utilitaires d'orchestration locale
+supabase/              Configuration locale de Supabase
+tests/e2e/             Parcours navigateur et tests de non-régression d'accessibilité
+PLAN_SIGNALDESK.md     Feuille de route produit et état d'avancement
+DESIGN_SYSTEM.md       Spécification visuelle et interactive complète
+DESIGN_CONTEXT.md      Contexte de design synthétique pour l'implémentation
 ```
 
-## Local setup
+## Installation locale
 
-Prerequisites: Homebrew, Colima and Docker. Project runtimes are pinned by
-[`mise.toml`](mise.toml).
+Prérequis : Homebrew, Colima et Docker. Les versions des outils du projet sont
+verrouillées dans [`mise.toml`](mise.toml).
 
 ```bash
 brew install mise colima docker
@@ -114,7 +117,7 @@ mise install
 pnpm install
 ```
 
-Start the container runtime, Supabase and the database:
+Démarrer le moteur de conteneurs, Supabase et la base de données :
 
 ```bash
 colima start --cpu 2 --memory 4 --disk 20
@@ -122,115 +125,118 @@ pnpm supabase:start
 pnpm db:prepare
 ```
 
-Run Next.js and Rails together:
+Lancer Next.js et Rails ensemble :
 
 ```bash
 pnpm dev
 ```
 
-| Service | Local URL |
+| Service | URL locale |
 | --- | --- |
 | Next.js | http://localhost:3000 |
-| Rails health | http://localhost:3001/up |
-| Versioned API health | http://localhost:3001/api/v1/health |
+| Santé de Rails | http://localhost:3001/up |
+| Santé de l'API versionnée | http://localhost:3001/api/v1/health |
 
-Environment variables and their ownership are documented in
-[`/.env.example`](.env.example). Local Supabase prints the publishable keys used
-by the web and API applications.
+Les variables d'environnement et leurs responsabilités sont documentées dans
+[`/.env.example`](.env.example). Supabase affiche en local les clés publiques
+utilisées par les applications web et API.
 
-## Demo workspace
+## Espace de démonstration
 
-Create a complete presentation workspace with one confirmed local account:
+Créer un espace de présentation complet avec un compte local confirmé :
 
 ```bash
 pnpm demo:seed
 ```
 
-The command prints the login credentials and public form URL. It is idempotent,
-refuses non-local Supabase hosts and rebuilds only its dedicated workspace. The
-dataset includes 18 realistic Signals, all statuses, priorities and sources,
-plus 10 customers, seven tags, eight team members, comments and activity history.
+La commande affiche les identifiants de connexion et l'URL du formulaire
+public. Elle est idempotente, refuse les hôtes Supabase non locaux et reconstruit
+uniquement l'espace qui lui est réservé. Le jeu de données comprend 18 Signals
+réalistes couvrant tous les statuts, priorités et sources, ainsi que 10 clients,
+sept tags, huit membres, des commentaires et un historique d'activité.
 
-See [`docs/demo-data.md`](docs/demo-data.md) for the data contract and safety
-guarantees.
+Le contrat de données et les garanties de sécurité sont détaillés dans
+[`docs/demo-data.md`](docs/demo-data.md).
 
-Regenerate the portfolio images from that deterministic dataset while the local
-applications are running:
+Pour régénérer les captures du portfolio à partir de ce jeu de données
+déterministe, avec les applications locales en cours d'exécution :
 
 ```bash
 pnpm portfolio:capture
 ```
 
-## Verification
+## Vérification
 
-Run the fast local and CI-equivalent checks:
+Lancer les contrôles locaux rapides, équivalents à ceux de la CI :
 
 ```bash
 pnpm check
 ```
 
-Run the complete release gate, including the real browser journey and Axe scans:
+Lancer la validation complète avant mise en production, avec le parcours réel
+dans le navigateur et les analyses Axe :
 
 ```bash
 pnpm test:e2e:install
 pnpm check:release
 ```
 
-The Rails suite covers domain models, authorization, workspace isolation,
-invitations, public form protections and transactional collaboration services.
-The Playwright suite provisions a temporary local Supabase identity, signs in,
-onboards a workspace, publishes a Signal and cleans up after itself.
+La suite Rails couvre les modèles métier, l'autorisation, l'isolation des espaces,
+les invitations, les protections du formulaire public et les services de
+collaboration transactionnels. La suite Playwright crée une identité temporaire
+dans Supabase local, se connecte, initialise un espace de travail, publie un
+Signal puis supprime ses données de test.
 
-More detail: [`docs/end-to-end-testing.md`](docs/end-to-end-testing.md) and
-[`docs/accessibility-audit.md`](docs/accessibility-audit.md).
+Pour aller plus loin : [`docs/end-to-end-testing.md`](docs/end-to-end-testing.md)
+et [`docs/accessibility-audit.md`](docs/accessibility-audit.md).
 
-## Security model
+## Modèle de sécurité
 
-1. Supabase owns credentials and sets the SSR session cookies.
-2. Next.js verifies the session before rendering protected routes.
-3. Next.js forwards the short-lived access token to Rails as a bearer token.
-4. Rails verifies the ES256 signature against Supabase JWKS and synchronizes the
-   minimal user identity.
-5. Pundit scopes every workspace resource and enforces owner/admin/member roles.
-6. PostgreSQL constraints preserve cross-record integrity; business tables have
-   RLS enabled without direct browser policies because Rails is the only data
-   access path.
+1. Supabase gère les identifiants et définit les cookies de session SSR.
+2. Next.js vérifie la session avant d'afficher les routes protégées.
+3. Next.js transmet à Rails le jeton d'accès de courte durée sous forme de jeton Bearer.
+4. Rails vérifie la signature ES256 avec le JWKS de Supabase et synchronise uniquement l'identité minimale de l'utilisateur.
+5. Pundit limite chaque ressource à son espace et applique les rôles propriétaire, administrateur et membre.
+6. Les contraintes PostgreSQL garantissent l'intégrité entre les enregistrements. Les tables métier utilisent RLS sans politiques d'accès direct depuis le navigateur, car Rails constitue l'unique chemin d'accès aux données.
 
-Anonymous public submissions use strict field limits, a honeypot, origin-limited
-CORS and per-IP/workspace rate limits. Invitation tokens are stored as SHA-256
-digests rather than plaintext.
+Les soumissions publiques anonymes appliquent des limites strictes aux champs,
+un honeypot, un CORS limité aux origines autorisées et une limitation des
+requêtes par adresse IP et par espace. Les jetons d'invitation sont stockés sous
+forme d'empreintes SHA-256 plutôt qu'en clair.
 
 ## Production
 
-| Component | Provider | URL |
+| Composant | Fournisseur | URL |
 | --- | --- | --- |
 | Web | Vercel | https://signal-desk-lake.vercel.app |
 | API | Render | https://signal-desk-api-5jsn.onrender.com |
-| Auth and PostgreSQL | Supabase | Private project infrastructure |
-| Transactional email | Resend | Action Mailer delivery adapter |
+| Authentification et PostgreSQL | Supabase | Infrastructure privée du projet |
+| Emails transactionnels | Resend | Adaptateur d'envoi pour Action Mailer |
 
-Vercel deploys `apps/web` as its Root Directory. Render builds the Rails Docker
-image from `apps/api` using [`render.yaml`](render.yaml). Both applications deploy
-from `main`, while path-filtered GitHub Actions run the web and API jobs only for
-code or dependency changes.
+Vercel déploie `apps/web` comme répertoire racine. Render construit l'image
+Docker Rails depuis `apps/api` avec [`render.yaml`](render.yaml). Les deux
+applications sont déployées depuis `main`, tandis que les GitHub Actions filtrées
+par chemin n'exécutent les jobs web et API que lorsque le code ou les dépendances
+concernées changent.
 
-## Design direction
+## Direction artistique
 
-SignalDesk deliberately brings a radical, pop visual language to a restrained
-B2B workflow without turning the product into an interactive artwork. Dense
-typography, hard borders, color fields and precise motion carry the identity;
-predictable navigation, legible states and familiar controls preserve daily
-usability.
+SignalDesk applique volontairement un langage visuel radical et pop à un outil
+B2B rigoureux, sans transformer le produit en œuvre interactive. La typographie
+dense, les bordures franches, les aplats de couleur et les animations précises
+portent son identité. La navigation prévisible, les états lisibles et les
+contrôles familiers préservent son efficacité au quotidien.
 
-[`DESIGN_SYSTEM.md`](DESIGN_SYSTEM.md) is the full source of truth. Agents and
-contributors begin with [`AGENTS.md`](AGENTS.md), which routes each task to the
-smallest relevant design context.
+[`DESIGN_SYSTEM.md`](DESIGN_SYSTEM.md) constitue la source de vérité complète.
+Les agents et contributeurs commencent par [`AGENTS.md`](AGENTS.md), qui oriente
+chaque tâche vers le contexte de design le plus pertinent et le plus concis.
 
-## Engineering decisions
+## Décisions techniques
 
-The project intentionally favors a small service surface: Supabase, Resend,
-Vercel and Render. It does not add Redis, a job platform, analytics, a CAPTCHA or
-a second database client until the product load justifies them.
+Le projet privilégie volontairement un nombre limité de services : Supabase,
+Resend, Vercel et Render. Il n'ajoute ni Redis, ni plateforme de jobs, ni outil
+d'analytics, ni CAPTCHA, ni second client de base de données tant que la charge
+du produit ne le justifie pas.
 
-The resulting benefits and limitations are documented candidly in
+Les bénéfices et les limites de ces choix sont documentés avec transparence dans
 [`docs/technical-tradeoffs.md`](docs/technical-tradeoffs.md).
