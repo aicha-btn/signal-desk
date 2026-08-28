@@ -26,18 +26,18 @@ export default async function LoginPage({
   return (
     <main className="grid min-h-screen bg-[var(--paper-0)] lg:grid-cols-12">
       <a className="skip-link" href="#authentication-form">Skip to authentication</a>
-      <section className="relative flex min-h-[330px] flex-col justify-between overflow-hidden border-b-2 border-[var(--ink-950)] bg-[var(--cobalt-500)] p-6 text-[var(--paper-0)] md:p-10 lg:col-span-5 lg:min-h-screen lg:border-r-2 lg:border-b-0">
+      <section className="relative flex min-h-[156px] flex-col justify-between overflow-hidden border-b-2 border-[var(--ink-950)] bg-[var(--cobalt-500)] p-4 text-[var(--paper-0)] md:min-h-[330px] md:p-10 lg:col-span-5 lg:min-h-screen lg:border-r-2 lg:border-b-0">
         <div aria-hidden="true" className="auth-signal-field">
           <span className="auth-signal-shape auth-signal-shape-one" />
           <span className="auth-signal-shape auth-signal-shape-two" />
           <span className="auth-signal-shape auth-signal-shape-three" />
         </div>
-        <Link href="/" className="relative z-10 inline-flex items-center gap-2 self-start font-display text-xl font-extrabold">
+        <Link href="/" className="relative z-10 inline-flex min-h-11 items-center gap-2 self-start font-display text-lg font-extrabold md:text-xl">
           <ArrowLeft aria-hidden="true" size={19} /> SignalDesk
         </Link>
         <div className="relative z-10 max-w-xl">
-          <p className="eyebrow mb-4 text-[var(--acid-400)]">SECURE LINE / AUTHENTICATION</p>
-          <h1 className="font-display text-5xl font-extrabold leading-[0.92] md:text-6xl">
+          <p className="eyebrow text-[var(--acid-400)] md:mb-4">SECURE WORKSPACE ACCESS</p>
+          <h1 className="hidden font-display text-5xl font-extrabold leading-[0.92] md:block md:text-6xl">
             Decisions need context. Access needs proof.
           </h1>
           <ul className="mt-8 hidden gap-3 text-sm md:grid">
@@ -50,13 +50,13 @@ export default async function LoginPage({
         </div>
       </section>
 
-      <section id="authentication-form" tabIndex={-1} className="flex items-center px-4 py-12 md:px-12 lg:col-span-7 lg:px-20">
+      <section id="authentication-form" tabIndex={-1} className="flex items-start px-4 py-7 md:items-center md:px-12 md:py-12 lg:col-span-7 lg:px-20">
         <div className="mx-auto w-full max-w-[480px]">
-          <p className="eyebrow mb-4">{mode === "login" ? "WELCOME BACK" : "FOUNDING WORKSPACE"}</p>
-          <h2 className="font-display text-4xl font-bold leading-none md:text-5xl">
+          <p className="eyebrow mb-3 md:mb-4">{mode === "login" ? "WELCOME BACK" : "FOUNDING WORKSPACE"}</p>
+          <h2 className="font-display text-3xl font-bold leading-none md:text-5xl">
             {mode === "login" ? "Pick up the signal." : "Open your Control Room."}
           </h2>
-          <p className="mt-4 mb-8 max-w-md leading-6 text-[var(--ink-600)]">
+          <p className="mt-3 mb-5 max-w-md text-sm leading-5 text-[var(--ink-600)] md:mt-4 md:mb-8 md:text-base md:leading-6">
             {mode === "login"
               ? "Your feed, priorities and team context are waiting."
               : "Create your account first. Your workspace comes next."}

@@ -1,6 +1,11 @@
 allowed_origins = [ ENV["APP_URL"], "https://signal-desk-lake.vercel.app" ].compact
 allowed_origins.map! { |origin| origin.delete_suffix("/") }
-allowed_origins.concat([ "http://localhost:3000", "http://127.0.0.1:3000" ]) unless Rails.env.production?
+unless Rails.env.production?
+  allowed_origins.concat([
+    %r{\Ahttp://localhost:\d+\z},
+    %r{\Ahttp://127\.0\.0\.1:\d+\z}
+  ])
+end
 allowed_origins.uniq!
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do

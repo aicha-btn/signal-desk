@@ -44,26 +44,26 @@ export function SignalList({ feedbacks, compact = false }: { feedbacks: Feedback
             key={feedback.id}
             href={`/signals/${feedback.id}`}
             aria-label={`Open Signal: ${feedback.title}`}
-            className="group grid gap-4 px-4 py-5 transition-colors hover:bg-[var(--canvas-50)] lg:grid-cols-[minmax(0,1.55fr)_minmax(120px,0.65fr)_110px_100px_180px_85px] lg:items-center lg:px-5"
+            className="group grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 gap-y-3 px-4 py-4 transition-colors hover:bg-[var(--canvas-50)] lg:grid-cols-[minmax(0,1.55fr)_minmax(120px,0.65fr)_110px_100px_180px_85px] lg:items-center lg:gap-4 lg:px-5 lg:py-5"
           >
-            <div className="min-w-0">
+            <div className="col-span-2 min-w-0 lg:col-span-1">
               <h3 className="flex items-center gap-2 truncate font-display text-lg font-bold">
                 <span className="truncate">{feedback.title}</span>
                 <ArrowUpRight aria-hidden="true" className="shrink-0 opacity-0 transition-opacity group-hover:opacity-100" size={17} />
               </h3>
               <p className="mt-1 line-clamp-2 text-sm leading-5 text-[var(--ink-600)]">{feedback.description}</p>
             </div>
-            <p className="text-sm font-semibold">{feedback.customer?.company || feedback.customer?.name || "Internal"}</p>
-            <span className="w-fit border border-[var(--ink-950)] px-2 py-1 font-mono text-[10px]">{statusLabels[feedback.status].toUpperCase()}</span>
-            <span className={`w-fit border border-[var(--ink-950)] px-2 py-1 font-mono text-[10px] ${priorityStyles[feedback.priority]}`}>{feedback.priority.toUpperCase()}</span>
-            <div className="flex min-w-0 flex-wrap gap-1.5">
+            <p className="col-start-1 row-start-2 min-w-0 truncate text-sm font-semibold lg:col-auto lg:row-auto">{feedback.customer?.company || feedback.customer?.name || "Internal"}</p>
+            <span className="col-start-1 row-start-3 w-fit border border-[var(--ink-950)] px-2 py-1 font-mono text-[10px] lg:col-auto lg:row-auto">{statusLabels[feedback.status].toUpperCase()}</span>
+            <span className={`col-start-2 row-start-3 w-fit border border-[var(--ink-950)] px-2 py-1 font-mono text-[10px] lg:col-auto lg:row-auto ${priorityStyles[feedback.priority]}`}>{feedback.priority.toUpperCase()}</span>
+            <div className="col-span-2 row-start-4 flex min-w-0 flex-wrap gap-1.5 lg:col-span-1 lg:row-auto">
               {feedback.tags.slice(0, 3).map((tag, index) => (
                 <span key={tag.id} className={`max-w-28 truncate border border-[var(--ink-950)] px-2 py-1 font-mono text-[10px] ${index === 0 ? "bg-[var(--acid-400)]" : index === 1 ? "bg-[var(--cyan-400)]" : "bg-[var(--mint-500)]"}`}>{tag.name}</span>
               ))}
               {feedback.tags.length > 3 && <span className="border border-[var(--ink-950)] bg-[var(--canvas-50)] px-2 py-1 font-mono text-[10px]">+{feedback.tags.length - 3}</span>}
               {!feedback.tags.length && <span className="font-mono text-[10px] text-[var(--ink-600)]">UNTAGGED</span>}
             </div>
-            <time className="font-mono text-[10px] text-[var(--ink-600)]" dateTime={feedback.created_at}>
+            <time className="col-start-2 row-start-2 text-right font-mono text-[10px] text-[var(--ink-600)] lg:col-auto lg:row-auto lg:text-left" dateTime={feedback.created_at}>
               {new Intl.DateTimeFormat("en", { day: "2-digit", month: "short" }).format(new Date(feedback.created_at)).toUpperCase()}
             </time>
           </Link>

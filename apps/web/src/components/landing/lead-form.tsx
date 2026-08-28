@@ -37,8 +37,8 @@ export function LeadForm() {
   }
 
   return (
-    <form action={formAction} onReset={(event) => event.preventDefault()} className="border-t-2 border-[var(--paper-0)] pt-6" noValidate>
-      <p className="mb-6 text-lg leading-7">
+    <form action={formAction} onReset={(event) => event.preventDefault()} className="border-t-2 border-[var(--paper-0)] pt-5 md:pt-6" noValidate>
+      <p className="mb-5 text-base leading-6 md:mb-6 md:text-lg md:leading-7">
         Join the founding list. No payment, no commitment, no automated sales sequence.
       </p>
 
@@ -47,7 +47,7 @@ export function LeadForm() {
         <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
-      <div className="grid gap-5">
+      <div className="grid gap-4 md:gap-5">
         <div>
           <label className="form-label" htmlFor="email">Work email *</label>
           <input
@@ -76,7 +76,7 @@ export function LeadForm() {
           <FieldError errors={state.fieldErrors?.company} />
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2">
+        <div className="grid grid-cols-2 gap-3 md:gap-5">
           <div>
             <label className="form-label" htmlFor="role">Your role</label>
             <DesignSelect

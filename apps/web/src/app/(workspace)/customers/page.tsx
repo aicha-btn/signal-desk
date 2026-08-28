@@ -25,11 +25,11 @@ export default async function CustomersPage({ searchParams }: { searchParams: Pr
           {customers.length ? (
             <div className="divide-y-2 divide-[var(--ink-950)]">
               {customers.map((customer) => (
-                <article key={customer.id} className="grid gap-4 px-4 py-5 md:grid-cols-[48px_minmax(0,1fr)_minmax(160px,0.6fr)_100px_104px] md:items-center md:px-5">
+                <article key={customer.id} className="grid grid-cols-[44px_minmax(0,1fr)_auto] gap-x-3 gap-y-3 px-4 py-4 md:grid-cols-[48px_minmax(0,1fr)_minmax(160px,0.6fr)_100px_104px] md:items-center md:gap-4 md:px-5 md:py-5">
                   <span className="flex size-11 items-center justify-center border-2 border-[var(--ink-950)] bg-[var(--cyan-400)]"><Building2 aria-hidden="true" size={20} /></span>
                   <div><h3 className="font-display text-lg font-bold">{customer.name}</h3><p className="text-sm text-[var(--ink-600)]">{customer.company || "Independent"}</p></div>
-                  <p className="flex items-center gap-2 text-sm"><Mail aria-hidden="true" size={15} /> {customer.email || "No email"}</p>
-                  <p className="font-mono text-[10px]">{customer.signals_count} SIGNALS</p>
+                  <p className="col-span-2 col-start-2 flex min-w-0 items-center gap-2 truncate text-sm md:col-span-1 md:col-start-auto"><Mail aria-hidden="true" className="shrink-0" size={15} /> <span className="truncate">{customer.email || "No email"}</span></p>
+                  <p className="col-start-2 font-mono text-[10px] md:col-start-auto">{customer.signals_count} SIGNALS</p>
                   <CustomerActions workspaceId={workspace.id} customerId={customer.id} name={customer.name} signalsCount={customer.signals_count} />
                 </article>
               ))}

@@ -38,7 +38,7 @@ export function AuthForm({ mode, nextPath }: { mode: Mode; nextPath?: string }) 
   return (
     <form action={formAction} onReset={(event) => event.preventDefault()} noValidate>
       {nextPath && <input type="hidden" name="nextPath" value={nextPath} />}
-      <div className="mb-8 flex border-2 border-[var(--ink-950)]" aria-label="Authentication mode">
+      <div className="mb-5 flex border-2 border-[var(--ink-950)] md:mb-8" aria-label="Authentication mode">
         <Link
           href={nextPath ? `/login?next=${encodeURIComponent(nextPath)}` : "/login"}
           className={`flex min-h-11 flex-1 items-center justify-center border-r-2 border-[var(--ink-950)] text-sm font-bold ${mode === "login" ? "bg-[var(--ink-950)] text-[var(--paper-0)]" : "bg-[var(--paper-0)]"}`}
@@ -53,7 +53,7 @@ export function AuthForm({ mode, nextPath }: { mode: Mode; nextPath?: string }) 
         </Link>
       </div>
 
-      <div className="grid gap-5">
+      <div className="grid gap-4 md:gap-5">
         {mode === "signup" && (
           <div>
             <label className="app-form-label" htmlFor="displayName">Your name</label>
@@ -87,7 +87,7 @@ export function AuthForm({ mode, nextPath }: { mode: Mode; nextPath?: string }) 
         <p className="mt-5 border-l-4 border-[var(--coral-500)] pl-3 text-sm leading-5" role="alert">{state.message}</p>
       )}
 
-      <button className="button button-primary mt-7 w-full" type="submit" disabled={pending} aria-busy={pending}>
+      <button className="button button-primary mt-5 w-full md:mt-7" type="submit" disabled={pending} aria-busy={pending}>
         <PendingButtonContent
           pending={pending}
           idleLabel={mode === "login" ? "Enter the Control Room" : "Create my workspace"}

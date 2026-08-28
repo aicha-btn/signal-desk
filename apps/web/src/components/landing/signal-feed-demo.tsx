@@ -70,7 +70,7 @@ export function SignalFeedDemo() {
             <p className="font-mono text-[10px] text-[var(--ink-600)]">DEMO WORKSPACE · LIVE VIEW</p>
           </div>
         </div>
-        <div className="flex flex-wrap items-center gap-2" aria-label="Filter signals">
+        <div className="flex w-full items-center gap-2 overflow-x-auto pb-1 md:w-auto md:flex-wrap md:overflow-visible md:pb-0" aria-label="Filter signals">
           <ListFilter aria-hidden="true" className="mr-1 shrink-0" size={17} />
           {filters.map((item) => (
             <button
@@ -94,14 +94,14 @@ export function SignalFeedDemo() {
         <span>SIGNAL</span><span>SOURCE</span><span>STATUS</span><span>OWNER</span><span>INTENSITY</span>
       </div>
 
-      <div className="min-h-[392px]">
+      <div className="min-h-[180px] lg:min-h-[392px]">
         {visibleSignals.map((signal) => (
           <article
             key={signal.title}
-            className="relative grid gap-5 border-b-2 border-[var(--line-200)] px-5 py-5 last:border-b-0 lg:grid-cols-[minmax(280px,2fr)_1fr_1fr_1fr_150px] lg:items-center"
+            className="relative grid grid-cols-2 gap-x-4 gap-y-3 border-b-2 border-[var(--line-200)] px-4 py-4 last:border-b-0 lg:grid-cols-[minmax(280px,2fr)_1fr_1fr_1fr_150px] lg:items-center lg:gap-5 lg:px-5 lg:py-5"
           >
             <span aria-hidden="true" className={`absolute inset-y-0 left-0 w-2 ${signal.tone}`} />
-            <div>
+            <div className="col-span-2 lg:col-span-1">
               <h3 className="font-display text-lg font-bold">{signal.title}</h3>
               <p className="mt-1 font-mono text-[10px] text-[var(--ink-600)]">{signal.account}</p>
             </div>

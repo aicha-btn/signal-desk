@@ -8,6 +8,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { LeadForm } from "@/components/landing/lead-form";
+import { MobileLandingMenu } from "@/components/landing/mobile-landing-menu";
 import { MotionController } from "@/components/landing/motion-controller";
 import { SignalFeedDemo } from "@/components/landing/signal-feed-demo";
 import { createClient } from "@/lib/supabase/server";
@@ -104,7 +105,7 @@ export default async function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
 
-      <header className="relative z-30 flex h-[68px] items-center justify-between border-b-2 border-[var(--ink-950)] bg-[var(--paper-0)] px-4 md:px-8">
+      <header className="sticky top-0 z-50 flex h-[60px] items-center justify-between border-b-2 border-[var(--ink-950)] bg-[var(--paper-0)] px-4 md:h-[68px] md:px-8">
         <a href="#top" className="font-display text-xl font-extrabold">
           SignalDesk
         </a>
@@ -114,7 +115,7 @@ export default async function Home() {
           <a className="nav-link" href="#teams">Teams</a>
           <a className="nav-link" href="#faq">FAQ</a>
         </nav>
-        <div className="flex items-center gap-2">
+        <div className="hidden items-center gap-2 lg:flex">
           {isAuthenticated ? (
             <a className="button button-dark min-h-10 px-3 text-sm sm:px-4" href="/control-room">
               Open Control Room
@@ -138,13 +139,14 @@ export default async function Home() {
             </>
           )}
         </div>
+        <MobileLandingMenu isAuthenticated={isAuthenticated} />
       </header>
 
       <section
         id="top"
         tabIndex={-1}
         aria-labelledby="hero-title"
-        className="relative isolate min-h-[640px] overflow-hidden border-b-2 border-[var(--ink-950)] bg-[var(--paper-0)] sm:min-h-[680px] lg:h-[calc(100svh-110px)] lg:min-h-[650px] lg:max-h-[850px]"
+        className="relative isolate min-h-[610px] scroll-mt-[60px] overflow-hidden border-b-2 border-[var(--ink-950)] bg-[var(--paper-0)] sm:min-h-[680px] lg:h-[calc(100svh-110px)] lg:min-h-[650px] lg:max-h-[850px]"
       >
         <div aria-hidden="true" className="hero-color-field">
           <span className="hero-color-plane hero-color-plane-cobalt" />
@@ -154,7 +156,7 @@ export default async function Home() {
           <span className="hero-color-plane hero-color-plane-cyan" />
         </div>
 
-        <div className="mx-auto flex h-full min-h-[640px] max-w-[1600px] flex-col justify-between px-4 py-7 sm:min-h-[680px] md:px-8 md:py-10 lg:min-h-[650px]">
+        <div className="mx-auto flex h-full min-h-[610px] max-w-[1600px] flex-col justify-between px-4 py-6 sm:min-h-[680px] md:px-8 md:py-10 lg:min-h-[650px]">
           <div className="max-w-[840px]">
             <p className="eyebrow mb-5" data-reveal>
               CUSTOMER FEEDBACK INTELLIGENCE
@@ -211,7 +213,7 @@ export default async function Home() {
       </div>
 
       <section className="border-b-2 border-[var(--ink-950)] bg-[var(--paper-0)]" aria-labelledby="problem-title">
-        <div className="mx-auto grid max-w-[1600px] gap-12 px-4 py-20 md:px-8 md:py-28 lg:grid-cols-12 lg:gap-8">
+        <div className="mx-auto grid max-w-[1600px] gap-8 px-4 py-14 md:px-8 md:py-28 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-7" data-reveal>
             <p className="eyebrow mb-6">THE PROBLEM / NOT THE PEOPLE</p>
             <h2 id="problem-title" className="section-title max-w-[900px]">
@@ -232,8 +234,8 @@ export default async function Home() {
         </div>
       </section>
 
-      <section id="product" className="border-b-2 border-[var(--ink-950)] bg-[var(--canvas-50)]" aria-labelledby="product-title">
-        <div className="mx-auto max-w-[1600px] px-4 py-20 md:px-8 md:py-28">
+      <section id="product" className="scroll-mt-[60px] border-b-2 border-[var(--ink-950)] bg-[var(--canvas-50)] md:scroll-mt-[68px]" aria-labelledby="product-title">
+        <div className="mx-auto max-w-[1600px] px-4 py-14 md:px-8 md:py-28">
           <div className="grid items-end gap-8 lg:grid-cols-12" data-reveal>
             <div className="lg:col-span-8">
               <p className="eyebrow mb-6">THE CONTROL ROOM</p>
@@ -246,14 +248,14 @@ export default async function Home() {
               Filter the feed without losing the story.
             </p>
           </div>
-          <div className="mt-12" data-reveal>
+          <div className="mt-8 md:mt-12" data-reveal>
             <SignalFeedDemo />
           </div>
         </div>
       </section>
 
-      <section id="method" aria-labelledby="method-title">
-        <div className="border-b-2 border-[var(--ink-950)] bg-[var(--ink-950)] px-4 py-16 text-[var(--paper-0)] md:px-8 md:py-20">
+      <section id="method" className="scroll-mt-[60px] md:scroll-mt-[68px]" aria-labelledby="method-title">
+        <div className="border-b-2 border-[var(--ink-950)] bg-[var(--ink-950)] px-4 py-12 text-[var(--paper-0)] md:px-8 md:py-20">
           <div className="mx-auto max-w-[1600px]" data-reveal>
             <p className="eyebrow mb-6 text-[var(--acid-400)]">ONE CALM OPERATING RHYTHM</p>
             <h2 id="method-title" className="section-title max-w-[1050px]">
@@ -265,14 +267,14 @@ export default async function Home() {
           {steps.map((step) => (
             <article
               key={step.number}
-              className={`grid min-h-[260px] border-b-2 border-[var(--ink-950)] p-4 md:grid-cols-12 md:p-8 ${step.color}`}
+              className={`grid min-h-[220px] border-b-2 border-[var(--ink-950)] p-4 md:min-h-[260px] md:grid-cols-12 md:p-8 ${step.color}`}
               data-process-step
             >
               <p className="font-mono text-sm font-medium md:col-span-2">{step.number}</p>
-              <h3 className="mt-8 font-display text-4xl font-bold leading-none md:col-span-6 md:mt-0 md:text-6xl">
+              <h3 className="mt-5 font-display text-3xl font-bold leading-none md:col-span-6 md:mt-0 md:text-6xl">
                 {step.title}
               </h3>
-              <div className="mt-10 flex max-w-md items-start gap-4 md:col-span-4 md:mt-0">
+              <div className="mt-6 flex max-w-md items-start gap-4 md:col-span-4 md:mt-0">
                 <Check aria-hidden="true" className="mt-1 shrink-0" size={22} strokeWidth={2.4} />
                 <p className="text-lg leading-7">{step.copy}</p>
               </div>
@@ -281,23 +283,23 @@ export default async function Home() {
         </div>
       </section>
 
-      <section id="teams" className="border-b-2 border-[var(--ink-950)] bg-[var(--paper-0)]" aria-labelledby="teams-title">
-        <div className="mx-auto max-w-[1600px] px-4 py-20 md:px-8 md:py-28">
+      <section id="teams" className="scroll-mt-[60px] border-b-2 border-[var(--ink-950)] bg-[var(--paper-0)] md:scroll-mt-[68px]" aria-labelledby="teams-title">
+        <div className="mx-auto max-w-[1600px] px-4 py-14 md:px-8 md:py-28">
           <div className="grid gap-8 lg:grid-cols-12" data-reveal>
             <p className="eyebrow lg:col-span-3">ONE SIGNAL / SHARED BY ALL</p>
             <h2 id="teams-title" className="section-title lg:col-span-9">
               Less translation between teams. More movement.
             </h2>
           </div>
-          <div className="mt-14 border-t-2 border-[var(--ink-950)]">
+          <div className="mt-9 border-t-2 border-[var(--ink-950)] md:mt-14">
             {audiences.map((audience, index) => (
               <article
                 key={audience.label}
-                className="grid gap-5 border-b-2 border-[var(--ink-950)] py-8 md:grid-cols-12 md:items-start"
+                className="grid gap-3 border-b-2 border-[var(--ink-950)] py-6 md:grid-cols-12 md:items-start md:gap-5 md:py-8"
                 data-reveal
               >
                 <p className="font-mono text-xs font-medium md:col-span-2">{audience.label}</p>
-                <h3 className="font-display text-3xl font-bold leading-tight md:col-span-6 md:text-4xl">
+                <h3 className="font-display text-2xl font-bold leading-tight md:col-span-6 md:text-4xl">
                   {audience.title}
                 </h3>
                 <p className="max-w-md text-lg leading-7 text-[var(--ink-600)] md:col-span-4">
@@ -317,8 +319,8 @@ export default async function Home() {
         </div>
       </section>
 
-      <section id="faq" className="border-b-2 border-[var(--ink-950)] bg-[var(--canvas-50)]" aria-labelledby="faq-title">
-        <div className="mx-auto grid max-w-[1600px] gap-12 px-4 py-20 md:px-8 md:py-28 lg:grid-cols-12">
+      <section id="faq" className="scroll-mt-[60px] border-b-2 border-[var(--ink-950)] bg-[var(--canvas-50)] md:scroll-mt-[68px]" aria-labelledby="faq-title">
+        <div className="mx-auto grid max-w-[1600px] gap-8 px-4 py-14 md:px-8 md:py-28 lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-4" data-reveal>
             <p className="eyebrow mb-6">CLEAR ANSWERS / NO THEATER</p>
             <h2 id="faq-title" className="section-title">Before you ask.</h2>
@@ -326,7 +328,7 @@ export default async function Home() {
           <div className="border-t-2 border-[var(--ink-950)] lg:col-span-7 lg:col-start-6" data-reveal>
             {questions.map((item) => (
               <details key={item.question} className="faq-item group border-b-2 border-[var(--ink-950)]">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-5 py-6 font-display text-xl font-bold md:text-2xl">
+                <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 py-4 font-display text-lg font-bold md:py-6 md:text-2xl">
                   {item.question}
                   <span aria-hidden="true" className="faq-toggle">+</span>
                 </summary>
@@ -339,8 +341,8 @@ export default async function Home() {
         </div>
       </section>
 
-      <section id="early-access" className="bg-[var(--cobalt-500)] text-[var(--paper-0)]" aria-labelledby="access-title">
-        <div className="mx-auto grid max-w-[1600px] gap-12 px-4 py-20 md:px-8 md:py-28 lg:grid-cols-12 lg:gap-8">
+      <section id="early-access" className="scroll-mt-[60px] bg-[var(--cobalt-500)] text-[var(--paper-0)] md:scroll-mt-[68px]" aria-labelledby="access-title">
+        <div className="mx-auto grid max-w-[1600px] gap-8 px-4 py-14 md:px-8 md:py-28 lg:grid-cols-12">
           <div className="lg:col-span-7" data-reveal>
             <div className="mb-7 inline-flex size-12 items-center justify-center border-2 border-[var(--paper-0)]">
               <Sparkles aria-hidden="true" size={24} strokeWidth={2.2} />

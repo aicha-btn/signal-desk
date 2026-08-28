@@ -29,6 +29,15 @@ test("an operator creates a workspace and publishes its first Signal", async ({ 
 
   await page.waitForURL("**/control-room");
   await expectAccessible(page, "control room");
+  await page.setViewportSize({ width: 390, height: 844 });
+  const mobileNavigation = page.getByRole("navigation", { name: "Mobile workspace navigation" });
+  await expect(mobileNavigation).toBeVisible();
+  await expect(mobileNavigation.getByRole("link", { name: "Signal Feed" })).toContainText("Signals");
+  const mobileNavigationBox = await mobileNavigation.boundingBox();
+  expect(mobileNavigationBox, "mobile workspace navigation must be rendered").not.toBeNull();
+  expect(mobileNavigationBox!.y, "mobile workspace navigation must stay at the bottom edge").toBeGreaterThanOrEqual(760);
+
+  await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/signals/new");
   await expectAccessible(page, "new Signal form");
   await page.getByLabel("Signal title").fill("Decision history disappears after refresh");

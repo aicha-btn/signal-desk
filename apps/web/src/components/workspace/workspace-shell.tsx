@@ -30,7 +30,7 @@ function SignOutButton() {
 
   return (
     <button
-      className="flex size-10 items-center justify-center border-2 border-[var(--ink-950)] bg-[var(--paper-0)]"
+      className="flex size-11 items-center justify-center border-2 border-[var(--ink-950)] bg-[var(--paper-0)] md:size-10"
       type="submit"
       aria-label={pending ? "Signing out" : "Sign out"}
       aria-busy={pending}
@@ -65,7 +65,7 @@ export function WorkspaceShell({
     .join("");
 
   return (
-    <main className="min-h-screen bg-[var(--canvas-50)] text-[var(--ink-950)] lg:grid lg:grid-cols-[232px_minmax(0,1fr)]">
+    <main className="min-h-screen bg-[var(--canvas-50)] pb-[calc(4rem+env(safe-area-inset-bottom))] text-[var(--ink-950)] lg:grid lg:grid-cols-[232px_minmax(0,1fr)] lg:pb-0">
       <a className="skip-link" href="#workspace-content">Skip to workspace content</a>
       <aside className="hidden border-r-2 border-[var(--ink-950)] bg-[var(--ink-950)] text-[var(--paper-0)] lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col">
         <Link href="/control-room" className="flex h-16 shrink-0 items-center border-b border-[var(--ink-600)] px-5 font-display text-xl font-extrabold">
@@ -102,9 +102,9 @@ export function WorkspaceShell({
 
       <div className="min-w-0">
         <div className="sticky top-0 z-40">
-          <header className="flex h-16 items-center justify-between border-b-2 border-[var(--ink-950)] bg-[var(--paper-0)] px-4 md:px-6">
+          <header className="flex h-14 items-center justify-between border-b-2 border-[var(--ink-950)] bg-[var(--paper-0)] px-3 md:h-16 md:px-6">
             <div className="flex min-w-0 items-center gap-3">
-              <RadioTower aria-hidden="true" className="shrink-0 text-[var(--cobalt-500)]" size={22} />
+              <RadioTower aria-hidden="true" className="hidden shrink-0 text-[var(--cobalt-500)] sm:block" size={22} />
               <div className="min-w-0">
                 <p className="truncate text-sm font-bold">{workspace.name}</p>
                 <p className="font-mono text-[9px] text-[var(--ink-600)]">{workspace.role.toUpperCase()} / LIVE</p>
@@ -113,7 +113,7 @@ export function WorkspaceShell({
             <div className="flex items-center gap-2">
               <Link
                 href="/signals/new"
-                className="flex size-10 items-center justify-center bg-[var(--cobalt-500)] text-[var(--paper-0)]"
+                className="flex size-11 items-center justify-center bg-[var(--cobalt-500)] text-[var(--paper-0)] md:size-10"
                 aria-label="Capture a Signal"
                 title="Capture a Signal"
               >
@@ -125,7 +125,7 @@ export function WorkspaceShell({
               >
                 <Search aria-hidden="true" size={17} /> Search
               </Link>
-              <span className="flex size-10 items-center justify-center bg-[var(--magenta-500)] font-mono text-xs font-medium" title={account.user.email}>
+              <span className="hidden size-10 items-center justify-center bg-[var(--magenta-500)] font-mono text-xs font-medium sm:flex" title={account.user.email}>
                 {initials}
               </span>
               <form action={signOut}>
@@ -134,7 +134,7 @@ export function WorkspaceShell({
             </div>
           </header>
 
-          <nav className="grid min-h-12 grid-cols-5 border-b-2 border-[var(--ink-950)] bg-[var(--ink-950)] text-[var(--paper-0)] lg:hidden" aria-label="Mobile workspace navigation">
+          <nav className="fixed inset-x-0 bottom-0 z-50 grid h-[calc(4rem+env(safe-area-inset-bottom))] grid-cols-5 border-t-2 border-[var(--ink-950)] bg-[var(--ink-950)] pb-[env(safe-area-inset-bottom)] text-[var(--paper-0)] lg:hidden" aria-label="Mobile workspace navigation">
             {[...navigation, { label: "Settings", href: "/settings", icon: Settings }].map(({ label, href, icon: Icon }) => {
               const active = isCurrentPath(pathname, href);
               return (
@@ -144,10 +144,10 @@ export function WorkspaceShell({
                   aria-label={label}
                   title={label}
                   aria-current={active ? "page" : undefined}
-                  className={`flex min-w-0 items-center justify-center gap-2 px-2 text-[11px] font-semibold ${active ? "bg-[var(--acid-400)] text-[var(--ink-950)]" : "text-[var(--ink-300)]"}`}
+                  className={`flex min-w-0 flex-col items-center justify-center gap-1 px-1 text-[9px] font-semibold ${active ? "bg-[var(--acid-400)] text-[var(--ink-950)]" : "text-[var(--ink-300)]"}`}
                 >
-                  <Icon aria-hidden="true" size={17} />
-                  <span className="hidden sm:inline">{label}</span>
+                  <Icon aria-hidden="true" size={18} />
+                  <span className="max-w-full truncate">{label === "Control Room" ? "Control" : label === "Signal Feed" ? "Signals" : label}</span>
                 </Link>
               );
             })}

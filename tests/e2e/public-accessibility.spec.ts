@@ -30,6 +30,17 @@ test("public pages reflow across the design-system viewports", async ({ page }) 
   }
 
   await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Open navigation" }).click();
+  await expect(page.getByRole("navigation", { name: "Mobile main navigation" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Product", exact: true })).toBeVisible();
+
+  await page.goto("/login");
+  const signInButton = page.getByRole("button", { name: "Enter the Control Room" });
+  const signInBox = await signInButton.boundingBox();
+  expect(signInBox, "the mobile sign-in action must be rendered").not.toBeNull();
+  expect(signInBox!.y + signInBox!.height, "the mobile sign-in action must be visible without scrolling").toBeLessThanOrEqual(844);
+
   await page.goto(`/forms/${workspace?.slug}`);
   await expectNoHorizontalOverflow(page, "public Signal form at 390px");
   await expectAccessible(page, "public Signal form");
@@ -48,6 +59,11 @@ test("skip links and custom selects preserve a logical keyboard flow", async ({ 
   await expect(skipLink).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(page.locator("#top")).toBeFocused();
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole("button", { name: "Open navigation" }).click();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("navigation", { name: "Mobile main navigation" })).toBeHidden();
 
   const roleSelect = page.getByRole("combobox", { name: "role" });
   await roleSelect.focus();

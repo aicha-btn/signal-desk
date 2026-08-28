@@ -29,7 +29,7 @@ export default async function ControlRoomPage() {
       />
 
       <div className="mx-auto max-w-[1440px] px-4 py-6 md:px-6 md:py-8">
-        <section className="grid border-2 border-[var(--ink-950)] bg-[var(--paper-0)] md:grid-cols-3" aria-label="Workspace pulse">
+        <section className="grid grid-cols-3 border-2 border-[var(--ink-950)] bg-[var(--paper-0)]" aria-label="Workspace pulse">
           <StatusBlock label="ACTIVE SIGNALS" value={String(active)} detail={`${feedbacks.length} captured in total`} tone="bg-[var(--cobalt-500)]" />
           <StatusBlock label="HIGH PRESSURE" value={String(urgent)} detail="High or critical priority" tone="bg-[var(--acid-400)]" />
           <StatusBlock label="CLOSED LOOPS" value={String(resolved)} detail="Resolved Signals" tone="bg-[var(--mint-500)]" />
@@ -59,13 +59,13 @@ export default async function ControlRoomPage() {
 
 function StatusBlock({ label, value, detail, tone }: { label: string; value: string; detail: string; tone: string }) {
   return (
-    <div className="border-b-2 border-[var(--ink-950)] p-5 last:border-b-0 md:border-r-2 md:border-b-0 md:last:border-r-0">
-      <div className="flex items-center justify-between gap-4">
-        <p className="font-mono text-[10px] text-[var(--ink-600)]">{label}</p>
-        <span aria-hidden="true" className={`size-3 border border-[var(--ink-950)] ${tone}`} />
+    <div className="min-w-0 border-r-2 border-[var(--ink-950)] p-3 last:border-r-0 md:p-5">
+      <div className="flex min-h-6 items-start justify-between gap-2 md:min-h-0 md:items-center md:gap-4">
+        <p className="font-mono text-[8px] leading-3 text-[var(--ink-600)] md:text-[10px]">{label}</p>
+        <span aria-hidden="true" className={`mt-0.5 size-2 shrink-0 border border-[var(--ink-950)] md:mt-0 md:size-3 ${tone}`} />
       </div>
-      <p className="mt-8 font-display text-3xl font-bold">{value}</p>
-      <p className="mt-1 text-sm text-[var(--ink-600)]">{detail}</p>
+      <p className="mt-3 font-display text-2xl font-bold md:mt-8 md:text-3xl">{value}</p>
+      <p className="sr-only md:not-sr-only md:mt-1 md:text-sm md:text-[var(--ink-600)]">{detail}</p>
     </div>
   );
 }
